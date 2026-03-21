@@ -51,13 +51,54 @@ export interface FinancingCandidate {
   lotId: string;
   vpcId: string;
   score: string;
+  scoreNumeric: number;
+  riskBand: "A" | "B" | "C" | "D";
   yieldEstimated: number;
   eligibleAmount: number;
   approvedAmount: number;
   producerName: string;
+  originatorType: "producer" | "cooperative";
   location: string;
+  country: string;
   cacaoType: string;
   daysRemaining: number;
+  evidenceCount: number;
+}
+
+export interface MockInvestmentOpportunity {
+  id: string;
+  vpc_id: string;
+  lot_id: string;
+  status: "published" | "funded" | "closed" | "repaid";
+  currency: "USDC" | "USDT";
+  target_raise_usd: number;
+  min_ticket_usd: number;
+  expected_return_bps: number;
+  tenor_days: number;
+  funding_deadline: string;
+  raised_amount_usd: number;
+  investor_count: number;
+  published_at: string;
+  lot_name: string;
+  crop_type: string;
+  country: string;
+  region: string;
+  originator_name: string;
+  originator_type: "producer" | "cooperative";
+  score: string;
+  score_numeric: number;
+  risk_band: "A" | "B" | "C" | "D";
+  evidence_count: number;
+}
+
+export interface MockInvestmentPosition {
+  id: string;
+  opportunity_id: string;
+  wallet_address: string;
+  amount_usd: number;
+  position_status: "pending" | "confirmed" | "active" | "repaid" | "defaulted";
+  tx_hash?: string;
+  created_at: string;
 }
 
 export interface OutcomeSimulation {
@@ -203,37 +244,52 @@ export const mockCandidates: FinancingCandidate[] = [
     lotId: "LOT-2026-001",
     vpcId: "VPC-2026-001",
     score: "A",
+    scoreNumeric: 92,
+    riskBand: "A",
     yieldEstimated: 1.8,
     eligibleAmount: 3600,
     approvedAmount: 2880,
     producerName: "Cooperativa San Martín",
+    originatorType: "cooperative",
     location: "Huila, Colombia",
+    country: "Colombia",
     cacaoType: "Fino de Aroma",
     daysRemaining: 45,
+    evidenceCount: 4,
   },
   {
     lotId: "LOT-2026-002",
     vpcId: "VPC-2026-002",
     score: "B+",
+    scoreNumeric: 78,
+    riskBand: "B",
     yieldEstimated: 1.2,
     eligibleAmount: 2400,
     approvedAmount: 960,
     producerName: "Finca El Progreso",
+    originatorType: "producer",
     location: "Esmeraldas, Ecuador",
+    country: "Ecuador",
     cacaoType: "CCN-51",
     daysRemaining: 62,
+    evidenceCount: 3,
   },
   {
     lotId: "LOT-2026-003",
     vpcId: "VPC-2026-003",
     score: "A-",
+    scoreNumeric: 86,
+    riskBand: "A",
     yieldEstimated: 2.4,
     eligibleAmount: 4800,
     approvedAmount: 0,
     producerName: "Asociación Cacao Sur",
+    originatorType: "cooperative",
     location: "Tumbes, Perú",
+    country: "Peru",
     cacaoType: "Trinitario",
     daysRemaining: 90,
+    evidenceCount: 5,
   },
 ];
 
@@ -247,3 +303,127 @@ export const mockOutcome: OutcomeSimulation = {
   producerNet: 2304,
   performanceRatio: 1.067,
 };
+
+export const mockOpportunities: MockInvestmentOpportunity[] = [
+  {
+    id: "OPP-2026-001",
+    vpc_id: "VPC-2026-001",
+    lot_id: "LOT-2026-001",
+    status: "published",
+    currency: "USDC",
+    target_raise_usd: 3600,
+    min_ticket_usd: 250,
+    expected_return_bps: 850,
+    tenor_days: 180,
+    funding_deadline: "2026-04-30",
+    raised_amount_usd: 2880,
+    investor_count: 7,
+    published_at: "2026-01-20",
+    lot_name: "Lote Norte – Finca San Martín",
+    crop_type: "Fino de Aroma",
+    country: "Colombia",
+    region: "Huila",
+    originator_name: "Cooperativa San Martín",
+    originator_type: "cooperative",
+    score: "A",
+    score_numeric: 92,
+    risk_band: "A",
+    evidence_count: 4,
+  },
+  {
+    id: "OPP-2026-002",
+    vpc_id: "VPC-2026-002",
+    lot_id: "LOT-2026-002",
+    status: "published",
+    currency: "USDC",
+    target_raise_usd: 2400,
+    min_ticket_usd: 250,
+    expected_return_bps: 920,
+    tenor_days: 150,
+    funding_deadline: "2026-05-15",
+    raised_amount_usd: 960,
+    investor_count: 3,
+    published_at: "2026-02-12",
+    lot_name: "Parcela Esmeraldas B",
+    crop_type: "CCN-51",
+    country: "Ecuador",
+    region: "Esmeraldas",
+    originator_name: "Finca El Progreso",
+    originator_type: "producer",
+    score: "B+",
+    score_numeric: 78,
+    risk_band: "B",
+    evidence_count: 3,
+  },
+  {
+    id: "OPP-2026-003",
+    vpc_id: "VPC-2026-003",
+    lot_id: "LOT-2026-003",
+    status: "published",
+    currency: "USDT",
+    target_raise_usd: 4800,
+    min_ticket_usd: 500,
+    expected_return_bps: 780,
+    tenor_days: 210,
+    funding_deadline: "2026-06-01",
+    raised_amount_usd: 0,
+    investor_count: 0,
+    published_at: "2026-03-05",
+    lot_name: "Lote Tumbes Alto",
+    crop_type: "Trinitario",
+    country: "Peru",
+    region: "Tumbes",
+    originator_name: "Asociación Cacao Sur",
+    originator_type: "cooperative",
+    score: "A-",
+    score_numeric: 86,
+    risk_band: "A",
+    evidence_count: 5,
+  },
+  {
+    id: "OPP-2026-004",
+    vpc_id: "VPC-2026-002",
+    lot_id: "LOT-2026-002",
+    status: "funded",
+    currency: "USDC",
+    target_raise_usd: 1800,
+    min_ticket_usd: 250,
+    expected_return_bps: 800,
+    tenor_days: 120,
+    funding_deadline: "2026-02-28",
+    raised_amount_usd: 1800,
+    investor_count: 5,
+    published_at: "2026-01-10",
+    lot_name: "Finca Palmeras – Lote 2",
+    crop_type: "Fino de Aroma",
+    country: "Colombia",
+    region: "Nariño",
+    originator_name: "Carlos Méndez",
+    originator_type: "producer",
+    score: "B+",
+    score_numeric: 80,
+    risk_band: "B",
+    evidence_count: 3,
+  },
+];
+
+export const mockPositions: MockInvestmentPosition[] = [
+  {
+    id: "POS-2026-001",
+    opportunity_id: "OPP-2026-001",
+    wallet_address: "GDEMO...WALLET1",
+    amount_usd: 500,
+    position_status: "active",
+    tx_hash: "0xabc1...def2",
+    created_at: "2026-01-22T10:30:00Z",
+  },
+  {
+    id: "POS-2026-002",
+    opportunity_id: "OPP-2026-004",
+    wallet_address: "GDEMO...WALLET1",
+    amount_usd: 750,
+    position_status: "repaid",
+    tx_hash: "0x3f9e...8ab4",
+    created_at: "2026-01-12T14:15:00Z",
+  },
+];

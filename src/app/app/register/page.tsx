@@ -28,25 +28,18 @@ import {
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import type { DocumentType } from "@/lib/types";
+import { useT } from "@/hooks/useT";
 
 // ─── Types ───────────────────────────────────────────────────
 
 type Section = "originator" | "plot" | "production" | "evidence" | "review";
 
-const SECTIONS: { key: Section; label: string; icon: React.ElementType }[] = [
-  { key: "originator", label: "Originator", icon: Building2 },
-  { key: "plot", label: "Plot Basics", icon: MapPin },
-  { key: "production", label: "Production", icon: Sprout },
-  { key: "evidence", label: "Evidence", icon: Upload },
-  { key: "review", label: "Review", icon: ClipboardList },
-];
-
-const DOC_TYPE_LABELS: Record<DocumentType, string> = {
-  land_record: "Land Record",
-  yield_history: "Yield History",
-  crop_plan: "Crop Plan",
-  photo_evidence: "Photo Evidence",
-  other: "Other",
+const SECTION_ICONS: Record<Section, React.ElementType> = {
+  originator: Building2,
+  plot: MapPin,
+  production: Sprout,
+  evidence: Upload,
+  review: ClipboardList,
 };
 
 interface PendingDoc {
@@ -60,6 +53,26 @@ interface PendingDoc {
 export default function RegisterPlotPage() {
   const router = useRouter();
   const { originators, addOriginator, addPlot } = useAppStore();
+  const { t } = useT();
+
+  const SECTIONS: { key: Section; label: string; icon: React.ElementType }[] = [
+    { key: "originator", label: t("register.sections.originator"), icon: SECTION_ICONS.originator },
+    { key: "plot", label: t("register.sections.plot"), icon: SECTION_ICONS.plot },
+    { key: "production", label: t("register.sections.production"), icon: SECTION_ICONS.production },
+    { key: "evidence", label: t("register.sections.evidence"), icon: SECTION_ICONS.evidence },
+    { key: "review", label: t("register.sections.review"), icon: SECTION_ICONS.review },
+  ];
+
+  const DOC_TYPE_LABELS: Record<DocumentType, string> = {
+    identity_document: t("register.evidence.docTypes.identity_document"),
+    land_record: t("register.evidence.docTypes.land_record"),
+    yield_history: t("register.evidence.docTypes.yield_history"),
+    crop_plan: t("register.evidence.docTypes.crop_plan"),
+    field_photos: t("register.evidence.docTypes.field_photos"),
+    offtake_agreement: t("register.evidence.docTypes.offtake_agreement"),
+    bank_statement: t("register.evidence.docTypes.bank_statement"),
+    other: t("register.evidence.docTypes.other"),
+  };
 
   const [section, setSection] = useState<Section>("originator");
   const [loading, setLoading] = useState(false);
@@ -72,7 +85,9 @@ export default function RegisterPlotPage() {
   const [newOriginator, setNewOriginator] = useState({
     name: "",
     type: "producer" as "producer" | "cooperative",
+    country: "",
     region: "",
+    district: "",
     contact_name: "",
     contact_email: "",
   });
@@ -83,8 +98,13 @@ export default function RegisterPlotPage() {
     crop_type: "" as "" | "CCN-51" | "Fino de Aroma" | "Trinitario",
     country: "",
     region: "",
+    district: "",
     area_hectares: "",
     season_label: "",
+    land_tenure_type: "owned" as "owned" | "leased" | "communal" | "other",
+    irrigation_type: "rainfed" as "rainfed" | "irrigated" | "mixed",
+    current_crop_stage: "vegetative" as "planting" | "vegetative" | "flowering" | "fruit_development" | "pre_harvest" | "harvest",
+    location_note: "",
   });
 
   // Production state
@@ -95,7 +115,7 @@ export default function RegisterPlotPage() {
 
   // Evidence state
   const [pendingDocs, setPendingDocs] = useState<PendingDoc[]>([]);
-  const [newDocType, setNewDocType] = useState<DocumentType>("photo_evidence");
+  const [newDocType, setNewDocType] = useState<DocumentType>("field_photos");
   const [newDocName, setNewDocName] = useState("");
 
   // ─── Derived ─────────────────────────────────────────────
@@ -120,22 +140,22 @@ export default function RegisterPlotPage() {
   function validateSection(s: Section): string | null {
     switch (s) {
       case "originator":
-        if (originatorMode === "select" && !selectedOriginatorId) return "Select an originator";
+        if (originatorMode === "select" && !selectedOriginatorId) return t("register.validation.selectOriginator");
         if (originatorMode === "create") {
-          if (!newOriginator.name) return "Originator name is required";
-          if (!newOriginator.region) return "Region is required";
+          if (!newOriginator.name) return t("register.validation.originatorName");
+          if (!newOriginator.region) return t("register.validation.originatorRegion");
         }
         return null;
       case "plot":
-        if (!plotData.plot_name) return "Plot name is required";
-        if (!plotData.crop_type) return "Crop type is required";
-        if (!plotData.country) return "Country is required";
-        if (!plotData.region) return "Region is required";
-        if (!plotData.area_hectares || parseFloat(plotData.area_hectares) <= 0) return "Area must be greater than 0";
-        if (!plotData.season_label) return "Season is required";
+        if (!plotData.plot_name) return t("register.validation.plotName");
+        if (!plotData.crop_type) return t("register.validation.cropType");
+        if (!plotData.country) return t("register.validation.country");
+        if (!plotData.region) return t("register.validation.region");
+        if (!plotData.area_hectares || parseFloat(plotData.area_hectares) <= 0) return t("register.validation.area");
+        if (!plotData.season_label) return t("register.validation.season");
         return null;
       case "production":
-        if (!productionData.expected_yield_tons || parseFloat(productionData.expected_yield_tons) <= 0) return "Expected yield must be greater than 0";
+        if (!productionData.expected_yield_tons || parseFloat(productionData.expected_yield_tons) <= 0) return t("register.validation.yield");
         return null;
       default:
         return null;
@@ -167,7 +187,7 @@ export default function RegisterPlotPage() {
 
   function addDoc() {
     if (!newDocName.trim()) {
-      toast.error("Enter a file name");
+      toast.error(t("register.toast.enterFileName"));
       return;
     }
     setPendingDocs((prev) => [
@@ -213,8 +233,13 @@ export default function RegisterPlotPage() {
           crop_type: plotData.crop_type as "CCN-51" | "Fino de Aroma" | "Trinitario",
           country: plotData.country,
           region: plotData.region,
+          district: plotData.district,
           area_hectares: parseFloat(plotData.area_hectares),
           season_label: plotData.season_label,
+          land_tenure_type: plotData.land_tenure_type,
+          irrigation_type: plotData.irrigation_type,
+          current_crop_stage: plotData.current_crop_stage,
+          location_note: plotData.location_note || undefined,
           expected_yield_tons: parseFloat(productionData.expected_yield_tons),
           estimated_harvest_date: productionData.estimated_harvest_date,
         },
@@ -223,14 +248,14 @@ export default function RegisterPlotPage() {
 
       const hasEvidence = pendingDocs.length > 0;
 
-      toast.success("Plot registered successfully", {
+      toast.success(t("register.toast.success"), {
         description: `${plot.id} · Status: ${hasEvidence ? "ready_for_scoring" : "registered"}`,
       });
 
       // 3. Redirect
       router.push("/app/lots");
     } catch (e) {
-      toast.error("Failed to register plot");
+      toast.error(t("register.toast.error"));
     } finally {
       setLoading(false);
     }
@@ -240,7 +265,7 @@ export default function RegisterPlotPage() {
 
   return (
     <>
-      <PageHeader title="Register New Plot" description="Create a new plot record with originator, production data, and evidence." />
+      <PageHeader title={t("register.title")} description={t("register.description")} />
 
       {/* Step indicator */}
       <div className="flex items-center gap-1 text-xs text-muted-foreground mb-4 flex-wrap">
@@ -281,9 +306,9 @@ export default function RegisterPlotPage() {
               <CardHeader className="border-b border-border/50 pb-4">
                 <CardTitle className="text-base flex items-center gap-2">
                   <Building2 className="h-4 w-4 text-primary" />
-                  Originator
+                  {t("register.originator.title")}
                 </CardTitle>
-                <p className="text-xs text-muted-foreground">Select an existing originator or create a new one</p>
+                <p className="text-xs text-muted-foreground">{t("register.originator.subtitle")}</p>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
                 {originators.length > 0 && (
@@ -294,7 +319,7 @@ export default function RegisterPlotPage() {
                       size="sm"
                       onClick={() => setOriginatorMode("select")}
                     >
-                      Select existing
+                      {t("register.originator.selectExisting")}
                     </Button>
                     <Button
                       type="button"
@@ -303,22 +328,22 @@ export default function RegisterPlotPage() {
                       onClick={() => setOriginatorMode("create")}
                     >
                       <Plus className="h-3 w-3 mr-1" />
-                      Create new
+                      {t("register.originator.createNew")}
                     </Button>
                   </div>
                 )}
 
                 {originatorMode === "select" && originators.length > 0 ? (
                   <div className="space-y-1.5">
-                    <Label>Originator *</Label>
+                    <Label>{t("register.originator.selectLabel")} *</Label>
                     <Select value={selectedOriginatorId} onValueChange={setSelectedOriginatorId}>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select originator..." />
+                        <SelectValue placeholder={t("register.originator.selectPlaceholder")} />
                       </SelectTrigger>
                       <SelectContent>
                         {originators.map((o) => (
                           <SelectItem key={o.id} value={o.id}>
-                            {o.name} · {o.type} · {o.region}
+                            {o.name} · {t(`register.originator.types.${o.type}`)} · {o.region}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -328,46 +353,64 @@ export default function RegisterPlotPage() {
                   <div className="space-y-4">
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label>Name *</Label>
+                        <Label>{t("register.originator.name")} *</Label>
                         <Input
-                          placeholder="Cooperativa San Martín"
+                          placeholder={t("register.originator.namePlaceholder")}
                           value={newOriginator.name}
                           onChange={(e) => setNewOriginator((p) => ({ ...p, name: e.target.value }))}
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label>Type *</Label>
+                        <Label>{t("register.originator.type")} *</Label>
                         <Select value={newOriginator.type} onValueChange={(v) => setNewOriginator((p) => ({ ...p, type: v as "producer" | "cooperative" }))}>
                           <SelectTrigger><SelectValue /></SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="producer">Producer</SelectItem>
-                            <SelectItem value="cooperative">Cooperative</SelectItem>
+                            <SelectItem value="producer">{t("register.originator.types.producer")}</SelectItem>
+                            <SelectItem value="cooperative">{t("register.originator.types.cooperative")}</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
                     </div>
-                    <div className="space-y-1.5">
-                      <Label>Region *</Label>
-                      <Input
-                        placeholder="Huila, Colombia"
-                        value={newOriginator.region}
-                        onChange={(e) => setNewOriginator((p) => ({ ...p, region: e.target.value }))}
-                      />
+                    <div className="grid sm:grid-cols-3 gap-4">
+                      <div className="space-y-1.5">
+                        <Label>{t("register.plot.country")} *</Label>
+                        <Input
+                          placeholder={t("register.plot.countryPlaceholder")}
+                          value={newOriginator.country}
+                          onChange={(e) => setNewOriginator((p) => ({ ...p, country: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label>{t("register.originator.region")} *</Label>
+                        <Input
+                          placeholder={t("register.originator.regionPlaceholder")}
+                          value={newOriginator.region}
+                          onChange={(e) => setNewOriginator((p) => ({ ...p, region: e.target.value }))}
+                        />
+                      </div>
+                      <div className="space-y-1.5">
+                        <Label>{t("register.originator.district")}</Label>
+                        <Input
+                          placeholder={t("register.originator.districtPlaceholder")}
+                          value={newOriginator.district}
+                          onChange={(e) => setNewOriginator((p) => ({ ...p, district: e.target.value }))}
+                        />
+                      </div>
                     </div>
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div className="space-y-1.5">
-                        <Label>Contact Name</Label>
+                        <Label>{t("register.originator.contactName")}</Label>
                         <Input
-                          placeholder="Juan Pérez"
+                          placeholder={t("register.originator.contactNamePlaceholder")}
                           value={newOriginator.contact_name}
                           onChange={(e) => setNewOriginator((p) => ({ ...p, contact_name: e.target.value }))}
                         />
                       </div>
                       <div className="space-y-1.5">
-                        <Label>Contact Email</Label>
+                        <Label>{t("register.originator.contactEmail")}</Label>
                         <Input
                           type="email"
-                          placeholder="juan@coop.co"
+                          placeholder={t("register.originator.contactEmailPlaceholder")}
                           value={newOriginator.contact_email}
                           onChange={(e) => setNewOriginator((p) => ({ ...p, contact_email: e.target.value }))}
                         />
@@ -385,23 +428,23 @@ export default function RegisterPlotPage() {
               <CardHeader className="border-b border-border/50 pb-4">
                 <CardTitle className="text-base flex items-center gap-2">
                   <MapPin className="h-4 w-4 text-primary" />
-                  Plot Basics
+                  {t("register.plot.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
                 <div className="space-y-1.5">
-                  <Label>Plot Name *</Label>
+                  <Label>{t("register.plot.name")} *</Label>
                   <Input
-                    placeholder="Finca El Progreso – Lote Norte"
+                    placeholder={t("register.plot.namePlaceholder")}
                     value={plotData.plot_name}
                     onChange={(e) => setPlotData((p) => ({ ...p, plot_name: e.target.value }))}
                   />
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
-                    <Label>Crop Type *</Label>
-                    <Select value={plotData.crop_type} onValueChange={(v) => setPlotData((p) => ({ ...p, crop_type: v as any }))}>
-                      <SelectTrigger><SelectValue placeholder="Select crop..." /></SelectTrigger>
+                    <Label>{t("register.plot.cropType")} *</Label>
+                    <Select value={plotData.crop_type} onValueChange={(v) => setPlotData((p) => ({ ...p, crop_type: v as "CCN-51" | "Fino de Aroma" | "Trinitario" }))}>
+                      <SelectTrigger><SelectValue placeholder={t("register.plot.cropPlaceholder")} /></SelectTrigger>
                       <SelectContent>
                         <SelectItem value="Fino de Aroma">Fino de Aroma</SelectItem>
                         <SelectItem value="CCN-51">CCN-51</SelectItem>
@@ -410,34 +453,77 @@ export default function RegisterPlotPage() {
                     </Select>
                   </div>
                   <div className="space-y-1.5">
-                    <Label>Season *</Label>
+                    <Label>{t("register.plot.season")} *</Label>
                     <Input
-                      placeholder="2026-A"
+                      placeholder={t("register.plot.seasonPlaceholder")}
                       value={plotData.season_label}
                       onChange={(e) => setPlotData((p) => ({ ...p, season_label: e.target.value }))}
                     />
                   </div>
                 </div>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-3 gap-4">
                   <div className="space-y-1.5">
-                    <Label>Country *</Label>
+                    <Label>{t("register.plot.country")} *</Label>
                     <Input
-                      placeholder="Colombia"
+                      placeholder={t("register.plot.countryPlaceholder")}
                       value={plotData.country}
                       onChange={(e) => setPlotData((p) => ({ ...p, country: e.target.value }))}
                     />
                   </div>
                   <div className="space-y-1.5">
-                    <Label>Region *</Label>
+                    <Label>{t("register.plot.region")} *</Label>
                     <Input
-                      placeholder="Huila"
+                      placeholder={t("register.plot.regionPlaceholder")}
                       value={plotData.region}
                       onChange={(e) => setPlotData((p) => ({ ...p, region: e.target.value }))}
                     />
                   </div>
+                  <div className="space-y-1.5">
+                    <Label>{t("register.plot.district")}</Label>
+                    <Input
+                      placeholder={t("register.plot.districtPlaceholder")}
+                      value={plotData.district}
+                      onChange={(e) => setPlotData((p) => ({ ...p, district: e.target.value }))}
+                    />
+                  </div>
+                </div>
+                <div className="grid sm:grid-cols-3 gap-4">
+                  <div className="space-y-1.5">
+                    <Label>{t("register.plot.landTenure")}</Label>
+                    <Select value={plotData.land_tenure_type} onValueChange={(v) => setPlotData((p) => ({ ...p, land_tenure_type: v as "owned" | "leased" | "communal" | "other" }))}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {(["owned","leased","communal","other"] as const).map((v) => (
+                          <SelectItem key={v} value={v}>{t(`register.plot.landTenureTypes.${v}`)}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>{t("register.plot.irrigation")}</Label>
+                    <Select value={plotData.irrigation_type} onValueChange={(v) => setPlotData((p) => ({ ...p, irrigation_type: v as "rainfed" | "irrigated" | "mixed" }))}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {(["rainfed","irrigated","mixed"] as const).map((v) => (
+                          <SelectItem key={v} value={v}>{t(`register.plot.irrigationTypes.${v}`)}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-1.5">
+                    <Label>{t("register.plot.cropStage")}</Label>
+                    <Select value={plotData.current_crop_stage} onValueChange={(v) => setPlotData((p) => ({ ...p, current_crop_stage: v as "planting" | "vegetative" | "flowering" | "fruit_development" | "pre_harvest" | "harvest" }))}>
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        {(["planting","vegetative","flowering","fruit_development","pre_harvest","harvest"] as const).map((v) => (
+                          <SelectItem key={v} value={v}>{t(`register.plot.cropStages.${v}`)}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
                 <div className="space-y-1.5">
-                  <Label>Area (hectares) *</Label>
+                  <Label>{t("register.plot.area")} *</Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -457,12 +543,12 @@ export default function RegisterPlotPage() {
               <CardHeader className="border-b border-border/50 pb-4">
                 <CardTitle className="text-base flex items-center gap-2">
                   <Sprout className="h-4 w-4 text-primary" />
-                  Production Details
+                  {t("register.production.title")}
                 </CardTitle>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
                 <div className="space-y-1.5">
-                  <Label>Expected Yield (tons) *</Label>
+                  <Label>{t("register.production.yield")} *</Label>
                   <Input
                     type="number"
                     step="0.1"
@@ -471,10 +557,10 @@ export default function RegisterPlotPage() {
                     value={productionData.expected_yield_tons}
                     onChange={(e) => setProductionData((p) => ({ ...p, expected_yield_tons: e.target.value }))}
                   />
-                  <p className="text-[11px] text-muted-foreground">Estimated production for this season in metric tons.</p>
+                  <p className="text-[11px] text-muted-foreground">{t("register.production.yieldNote")}</p>
                 </div>
                 <div className="space-y-1.5">
-                  <Label>Estimated Harvest Date</Label>
+                  <Label>{t("register.production.harvestDate")}</Label>
                   <Input
                     type="date"
                     value={productionData.estimated_harvest_date}
@@ -483,8 +569,8 @@ export default function RegisterPlotPage() {
                 </div>
 
                 <div className="rounded-md bg-secondary p-3 text-xs text-muted-foreground mt-2">
-                  <p className="font-medium text-foreground mb-1">About yield estimation</p>
-                  <p>This figure will be used as the base for the scoring engine. Provide your best realistic estimate for this season.</p>
+                  <p className="font-medium text-foreground mb-1">{t("register.production.about.title")}</p>
+                  <p>{t("register.production.about.body")}</p>
                 </div>
               </CardContent>
             </Card>
@@ -496,26 +582,26 @@ export default function RegisterPlotPage() {
               <CardHeader className="border-b border-border/50 pb-4">
                 <CardTitle className="text-base flex items-center gap-2">
                   <Upload className="h-4 w-4 text-primary" />
-                  Evidence Documents
+                  {t("register.evidence.title")}
                 </CardTitle>
                 <p className="text-xs text-muted-foreground">
-                  At least 1 document is required for the plot to be marked as <Badge variant="default" className="text-[10px] ml-1">ready_for_scoring</Badge>
+                  {t("register.evidence.subtitle")} <Badge variant="default" className="text-[10px] ml-1">{t("register.evidence.ready")}</Badge>
                 </p>
               </CardHeader>
               <CardContent className="pt-4 space-y-4">
                 {/* Add new doc */}
                 <div className="flex gap-2 items-end">
                   <div className="space-y-1.5 flex-1 min-w-0">
-                    <Label>File Name</Label>
+                    <Label>{t("register.evidence.fileName")}</Label>
                     <Input
-                      placeholder="land_certificate_2026.pdf"
+                      placeholder={t("register.evidence.fileNamePlaceholder")}
                       value={newDocName}
                       onChange={(e) => setNewDocName(e.target.value)}
                       onKeyDown={(e) => { if (e.key === "Enter") { e.preventDefault(); addDoc(); } }}
                     />
                   </div>
                   <div className="space-y-1.5 w-44">
-                    <Label>Type</Label>
+                    <Label>{t("register.evidence.type")}</Label>
                     <Select value={newDocType} onValueChange={(v) => setNewDocType(v as DocumentType)}>
                       <SelectTrigger><SelectValue /></SelectTrigger>
                       <SelectContent>
@@ -549,14 +635,14 @@ export default function RegisterPlotPage() {
                 ) : (
                   <div className="rounded-md border border-dashed border-border p-6 text-center">
                     <Upload className="h-8 w-8 text-muted-foreground/50 mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">No documents added yet</p>
-                    <p className="text-xs text-muted-foreground mt-1">Without evidence, the plot will be saved as <span className="font-medium">registered</span> (not ready for scoring).</p>
+                    <p className="text-sm text-muted-foreground">{t("register.evidence.noDocsTitle")}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{t("register.evidence.noDocsBody")}</p>
                   </div>
                 )}
 
                 <div className="rounded-md bg-secondary p-3 text-xs text-muted-foreground">
-                  <p className="font-medium text-foreground mb-1">MVP Note</p>
-                  <p>In this demo, documents are registered by name only. In production, file uploads would go to cloud storage.</p>
+                  <p className="font-medium text-foreground mb-1">{t("register.evidence.mvpNote.title")}</p>
+                  <p>{t("register.evidence.mvpNote.body")}</p>
                 </div>
               </CardContent>
             </Card>
@@ -569,35 +655,35 @@ export default function RegisterPlotPage() {
                 <CardHeader className="border-b border-border/50 pb-4">
                   <CardTitle className="text-base flex items-center gap-2">
                     <ClipboardList className="h-4 w-4 text-primary" />
-                    Review Before Submitting
+                    {t("register.review.title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="pt-4 space-y-5">
                   {/* Originator summary */}
                   <div>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Originator</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">{t("register.review.originator")}</p>
                     {resolvedOriginator ? (
                       <div className="rounded-md bg-secondary/50 p-3 text-sm">
                         <p className="font-medium">{"name" in resolvedOriginator ? resolvedOriginator.name : ""}</p>
                         <p className="text-xs text-muted-foreground">
-                          {"type" in resolvedOriginator ? resolvedOriginator.type : ""} · {"region" in resolvedOriginator ? resolvedOriginator.region : ""}
+                          {"type" in resolvedOriginator ? t(`register.originator.types.${resolvedOriginator.type}`) : ""} · {"region" in resolvedOriginator ? resolvedOriginator.region : ""}
                         </p>
                       </div>
                     ) : (
-                      <p className="text-sm text-destructive">No originator selected</p>
+                      <p className="text-sm text-destructive">{t("register.review.noOriginator")}</p>
                     )}
                   </div>
 
                   {/* Plot summary */}
                   <div>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Plot</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">{t("register.review.plot")}</p>
                     <div className="grid sm:grid-cols-2 gap-3">
                       {[
-                        { label: "Name", value: plotData.plot_name },
-                        { label: "Crop", value: plotData.crop_type },
-                        { label: "Location", value: `${plotData.region}, ${plotData.country}` },
-                        { label: "Area", value: plotData.area_hectares ? `${plotData.area_hectares} ha` : "" },
-                        { label: "Season", value: plotData.season_label },
+                        { label: t("register.review.labels.name"), value: plotData.plot_name },
+                        { label: t("register.review.labels.crop"), value: plotData.crop_type },
+                        { label: t("register.review.labels.location"), value: `${plotData.region}, ${plotData.country}` },
+                        { label: t("register.review.labels.area"), value: plotData.area_hectares ? `${plotData.area_hectares} ${t("common.ha")}` : "" },
+                        { label: t("register.review.labels.season"), value: plotData.season_label },
                       ].map((item) => (
                         <div key={item.label} className="rounded-md bg-secondary/50 p-2.5">
                           <p className="text-[10px] text-muted-foreground uppercase">{item.label}</p>
@@ -609,14 +695,14 @@ export default function RegisterPlotPage() {
 
                   {/* Production summary */}
                   <div>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Production</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">{t("register.review.production")}</p>
                     <div className="grid sm:grid-cols-2 gap-3">
                       <div className="rounded-md bg-secondary/50 p-2.5">
-                        <p className="text-[10px] text-muted-foreground uppercase">Expected Yield</p>
-                        <p className="text-sm font-medium">{productionData.expected_yield_tons ? `${productionData.expected_yield_tons} Ton` : "—"}</p>
+                        <p className="text-[10px] text-muted-foreground uppercase">{t("register.review.labels.expectedYield")}</p>
+                        <p className="text-sm font-medium">{productionData.expected_yield_tons ? `${productionData.expected_yield_tons} ${t("common.ton")}` : "—"}</p>
                       </div>
                       <div className="rounded-md bg-secondary/50 p-2.5">
-                        <p className="text-[10px] text-muted-foreground uppercase">Harvest Date</p>
+                        <p className="text-[10px] text-muted-foreground uppercase">{t("register.review.labels.harvestDate")}</p>
                         <p className="text-sm font-medium">{productionData.estimated_harvest_date || "—"}</p>
                       </div>
                     </div>
@@ -624,7 +710,7 @@ export default function RegisterPlotPage() {
 
                   {/* Evidence summary */}
                   <div>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">Evidence</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium mb-2">{t("register.review.evidence")}</p>
                     {pendingDocs.length > 0 ? (
                       <div className="space-y-1.5">
                         {pendingDocs.map((d) => (
@@ -636,20 +722,20 @@ export default function RegisterPlotPage() {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-warning">No documents — plot will be saved as <span className="font-medium">registered</span></p>
+                      <p className="text-sm text-warning">{t("register.review.noEvidence")}</p>
                     )}
                   </div>
 
                   {/* Status preview */}
                   <div className="rounded-md border border-border p-4">
-                    <p className="text-xs text-muted-foreground mb-1">After submission, this plot will be:</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("register.review.statusPreview")}</p>
                     <div className="flex items-center gap-2">
                       <Badge variant={pendingDocs.length > 0 ? "success" : "accent"}>
-                        {pendingDocs.length > 0 ? "ready_for_scoring" : "registered"}
+                        {pendingDocs.length > 0 ? t("lots.status.ready_for_scoring") : t("lots.status.registered")}
                       </Badge>
                       <span className="text-xs text-muted-foreground">·</span>
                       <Badge variant="outline">
-                        {pendingDocs.length > 0 ? "sufficient" : "insufficient"} documentation
+                        {pendingDocs.length > 0 ? t("common.sufficient") : t("common.insufficient")}
                       </Badge>
                     </div>
                   </div>
@@ -669,7 +755,7 @@ export default function RegisterPlotPage() {
           disabled={currentSectionIdx === 0}
         >
           <ArrowLeft className="h-4 w-4 mr-1" />
-          Back
+          {t("register.nav.back")}
         </Button>
 
         {section === "review" ? (
@@ -682,18 +768,18 @@ export default function RegisterPlotPage() {
             {loading ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                Saving...
+                {t("register.nav.saving")}
               </>
             ) : (
               <>
-                Register Plot
+                {t("register.nav.submit")}
                 <CheckCircle2 className="h-4 w-4 ml-1" />
               </>
             )}
           </Button>
         ) : (
           <Button variant="accent" onClick={goNext}>
-            Next
+            {t("register.nav.next")}
             <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
         )}

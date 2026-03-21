@@ -2,30 +2,39 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, BarChart3, FilePlus, Briefcase, Calculator, LayoutDashboard } from "lucide-react";
+import { Leaf, BarChart3, FilePlus, Briefcase, Calculator, LayoutDashboard, Globe, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-
-const navItems = [
-  { href: "/app", label: "Overview", icon: LayoutDashboard },
-  { href: "/app/lots", label: "My Plots", icon: BarChart3 },
-  { href: "/app/register", label: "Register Plot", icon: FilePlus },
-  { href: "/app/financing", label: "Financing Review", icon: Briefcase },
-  { href: "/app/simulation", label: "Outcome Simulation", icon: Calculator },
-];
+import { useT } from "@/hooks/useT";
+import { useLangStore } from "@/store/langStore";
 
 export function AppNavbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t } = useT();
+  const { lang, setLang } = useLangStore();
+
+  const navItems = [
+    { href: "/app", label: t("nav.dashboard"), icon: LayoutDashboard },
+    { href: "/app/lots", label: t("nav.myPlots"), icon: BarChart3 },
+    { href: "/app/register", label: t("nav.registerPlot"), icon: FilePlus },
+    { href: "/app/opportunities", label: t("nav.opportunities"), icon: TrendingUp },
+    { href: "/app/financing", label: t("nav.financingReview"), icon: Briefcase },
+    { href: "/app/simulation", label: t("nav.outcomeSimulation"), icon: Calculator },
+  ];
+
+  function toggleLang() {
+    setLang(lang === "en" ? "es" : "en");
+  }
 
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between">
         <Link href="/" className="flex items-center gap-2 font-semibold text-foreground">
           <Leaf className="h-5 w-5 text-primary" />
-          <span>Aleph Cacao</span>
+          <span>{t("nav.brand")}</span>
         </Link>
 
         {/* Desktop nav */}
@@ -50,20 +59,38 @@ export function AppNavbar() {
           })}
         </nav>
 
-        <div className="hidden md:flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-success" />
-          <span className="text-xs text-muted-foreground">Testnet Connected</span>
+        <div className="hidden md:flex items-center gap-3">
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-success" />
+            <span className="text-xs text-muted-foreground">{t("nav.connected")}</span>
+          </div>
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors border border-border/50"
+            title={lang === "en" ? t("nav.lang.es") : t("nav.lang.en")}
+          >
+            <Globe className="h-3.5 w-3.5" />
+            {lang === "en" ? "ES" : "EN"}
+          </button>
         </div>
 
         {/* Mobile toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="md:hidden"
-          onClick={() => setMobileOpen(!mobileOpen)}
-        >
-          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </Button>
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            onClick={toggleLang}
+            className="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors border border-border/50"
+          >
+            <Globe className="h-3.5 w-3.5" />
+            {lang === "en" ? "ES" : "EN"}
+          </button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen(!mobileOpen)}
+          >
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </Button>
+        </div>
       </div>
 
       {/* Mobile nav */}

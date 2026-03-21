@@ -87,6 +87,7 @@ export const useAppStore = create<AppStore>()(
           file_name: d.file_name,
           file_url: `local://${d.file_name}`,
           uploaded_at: now(),
+          verification_status: "pending" as const,
         }));
 
         set((s) => ({
@@ -105,6 +106,7 @@ export const useAppStore = create<AppStore>()(
           file_name: doc.file_name,
           file_url: `local://${doc.file_name}`,
           uploaded_at: now(),
+          verification_status: "pending",
         };
 
         set((s) => {

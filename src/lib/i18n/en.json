@@ -1,0 +1,525 @@
+{
+  "nav": {
+    "brand": "Aleph Cacao",
+    "dashboard": "Dashboard",
+    "myPlots": "My Plots",
+    "registerPlot": "Register Plot",
+    "opportunities": "Opportunities",
+    "financingReview": "Financing Review",
+    "outcomeSimulation": "Outcome Simulation",
+    "connected": "Testnet Connected",
+    "lang": {
+      "en": "English",
+      "es": "Español"
+    }
+  },
+
+  "landing": {
+    "badge": "RWA Protocol · Pre-Harvest Financing",
+    "hero": {
+      "title1": "From field to chain.",
+      "title2": "Structured underwriting",
+      "title3": "for cacao pre-harvest.",
+      "subtitle": "We turn harvest projections into auditable Verified Production Claims (VPCs). Automated scoring, on-chain issuance, and structured access to capital — built for agricultural originators."
+    },
+    "cta": {
+      "originator": "Register a Lot",
+      "investor": "Review Opportunities"
+    },
+    "flow": {
+      "title": "How it works",
+      "subtitle": "From registration to funded opportunity in four steps",
+      "step1": { "title": "Register your lot", "desc": "Enter production data, location, and cacao type. Upload evidence documents." },
+      "step2": { "title": "Automated scoring", "desc": "Our engine calculates estimated yield, consistency score, and risk band." },
+      "step3": { "title": "VPC Issuance", "desc": "An auditable Verified Production Claim is generated and anchored on-chain." },
+      "step4": { "title": "Investor funding", "desc": "Approved opportunities become available to investors with full transparency." }
+    },
+    "roles": {
+      "title": "Two roles. One platform.",
+      "originator": {
+        "title": "Originator",
+        "desc": "Producers and cooperatives register lots, submit evidence, and access structured pre-harvest capital.",
+        "cta": "Start as Originator"
+      },
+      "investor": {
+        "title": "Investor",
+        "desc": "Browse scored, VPC-backed opportunities. Review risk, yield, and financing terms before committing capital.",
+        "cta": "Browse Opportunities"
+      }
+    },
+    "trust": {
+      "title": "Built for institutional confidence",
+      "item1": { "title": "Full traceability", "desc": "Every lot has an auditable record from day zero." },
+      "item2": { "title": "Verifiable data", "desc": "Scoring based on real agricultural data and calibrated projections." },
+      "item3": { "title": "On-chain claims", "desc": "VPCs backed by real production data, verifiable on-chain." }
+    },
+    "finalCta": {
+      "title": "Liquidity for the harvest of tomorrow.",
+      "subtitle": "Start digitizing your production today.",
+      "btn": "Get Started"
+    },
+    "footer": {
+      "brand": "Aleph Cacao © 2026",
+      "tagline": "MVP Demo · Hackathon Build"
+    }
+  },
+
+  "overview": {
+    "title": "Overview",
+    "description": "Dashboard summary for Aleph Cacao",
+    "stats": {
+      "plots": "Active Plots",
+      "plotsSub": "registered",
+      "yield": "Total Est. Yield",
+      "readyForScoring": "Ready for Scoring",
+      "readyForScoringSub": "plots with evidence",
+      "documents": "Documents",
+      "documentsSub": "uploaded evidence"
+    },
+    "actions": {
+      "register": { "label": "Register Plot", "desc": "Create a new plot with originator and evidence" },
+      "lots": { "label": "My Plots", "desc": "View all plots and their operational status" },
+      "financing": { "label": "Financing Review", "desc": "Review pre-approved candidates for financing" }
+    },
+    "recentPlots": {
+      "title": "Recent Plots",
+      "viewAll": "View all →",
+      "empty": "No plots yet. Register your first one to get started.",
+      "registerFirst": "Register Plot"
+    },
+    "table": {
+      "plot": "Plot",
+      "originator": "Originator",
+      "crop": "Crop",
+      "region": "Region",
+      "yield": "Yield",
+      "docs": "Docs",
+      "status": "Status"
+    }
+  },
+
+  "register": {
+    "title": "Register New Plot",
+    "description": "Create a new plot record with originator, production data, and evidence.",
+    "sections": {
+      "originator": "Originator",
+      "plot": "Plot Basics",
+      "production": "Production",
+      "evidence": "Evidence",
+      "review": "Review"
+    },
+    "originator": {
+      "title": "Originator",
+      "subtitle": "Select an existing originator or create a new one",
+      "selectExisting": "Select existing",
+      "createNew": "Create new",
+      "selectLabel": "Originator",
+      "selectPlaceholder": "Select originator...",
+      "name": "Name",
+      "namePlaceholder": "Cooperativa San Martín",
+      "type": "Type",
+      "region": "Region",
+      "regionPlaceholder": "Huila, Colombia",
+      "district": "District / Municipality",
+      "districtPlaceholder": "Pitalito",
+      "contactName": "Contact Name",
+      "contactNamePlaceholder": "Juan Pérez",
+      "contactEmail": "Contact Email",
+      "contactEmailPlaceholder": "juan@coop.co",
+      "types": {
+        "producer": "Producer",
+        "cooperative": "Cooperative"
+      }
+    },
+    "plot": {
+      "title": "Plot Basics",
+      "name": "Plot Name",
+      "namePlaceholder": "Finca El Progreso – North Plot",
+      "cropType": "Crop Type",
+      "cropPlaceholder": "Select crop...",
+      "season": "Season",
+      "seasonPlaceholder": "2026-A",
+      "country": "Country",
+      "countryPlaceholder": "Colombia",
+      "region": "Region",
+      "regionPlaceholder": "Huila",
+      "district": "District",
+      "districtPlaceholder": "La Plata",
+      "area": "Area (hectares)",
+      "landTenure": "Land Tenure",
+      "irrigation": "Irrigation",
+      "cropStage": "Current Crop Stage",
+      "locationNote": "Location Note (optional)",
+      "locationNotePlaceholder": "e.g. Near the river bend, sector 3",
+      "landTenureTypes": {
+        "owned": "Owned",
+        "leased": "Leased",
+        "communal": "Communal",
+        "other": "Other"
+      },
+      "irrigationTypes": {
+        "rainfed": "Rainfed",
+        "irrigated": "Irrigated",
+        "mixed": "Mixed"
+      },
+      "cropStages": {
+        "planting": "Planting",
+        "vegetative": "Vegetative",
+        "flowering": "Flowering",
+        "fruit_development": "Fruit Development",
+        "pre_harvest": "Pre-Harvest",
+        "harvest": "Harvest"
+      }
+    },
+    "production": {
+      "title": "Production Details",
+      "yield": "Expected Yield (tons)",
+      "yieldNote": "Estimated production for this season in metric tons.",
+      "harvestDate": "Estimated Harvest Date",
+      "about": {
+        "title": "About yield estimation",
+        "body": "This figure will be used as the base for the scoring engine. Provide your best realistic estimate for this season."
+      }
+    },
+    "evidence": {
+      "title": "Evidence Documents",
+      "subtitle": "At least 1 document is required for the plot to be marked as",
+      "ready": "ready_for_scoring",
+      "fileName": "File Name",
+      "fileNamePlaceholder": "land_certificate_2026.pdf",
+      "type": "Type",
+      "noDocsTitle": "No documents added yet",
+      "noDocsBody": "Without evidence, the plot will be saved as registered (not ready for scoring).",
+      "mvpNote": {
+        "title": "MVP Note",
+        "body": "In this demo, documents are registered by name only. In production, file uploads would go to cloud storage."
+      },
+      "docTypes": {
+        "identity_document": "Identity Document",
+        "land_record": "Land Record",
+        "yield_history": "Yield History",
+        "crop_plan": "Crop Plan",
+        "field_photos": "Field Photos",
+        "offtake_agreement": "Offtake Agreement",
+        "bank_statement": "Bank Statement",
+        "other": "Other"
+      }
+    },
+    "review": {
+      "title": "Review Before Submitting",
+      "originator": "Originator",
+      "noOriginator": "No originator selected",
+      "plot": "Plot",
+      "production": "Production",
+      "evidence": "Evidence",
+      "noEvidence": "No documents — plot will be saved as registered",
+      "statusPreview": "After submission, this plot will be:",
+      "labels": {
+        "name": "Name",
+        "crop": "Crop",
+        "location": "Location",
+        "area": "Area",
+        "season": "Season",
+        "expectedYield": "Expected Yield",
+        "harvestDate": "Harvest Date"
+      }
+    },
+    "nav": {
+      "back": "Back",
+      "next": "Next",
+      "submit": "Register Plot",
+      "saving": "Saving..."
+    },
+    "toast": {
+      "success": "Plot registered successfully",
+      "error": "Failed to register plot",
+      "enterFileName": "Enter a file name"
+    },
+    "validation": {
+      "selectOriginator": "Select an originator",
+      "originatorName": "Originator name is required",
+      "originatorRegion": "Region is required",
+      "plotName": "Plot name is required",
+      "cropType": "Crop type is required",
+      "country": "Country is required",
+      "region": "Region is required",
+      "area": "Area must be greater than 0",
+      "season": "Season is required",
+      "yield": "Expected yield must be greater than 0"
+    }
+  },
+
+  "lots": {
+    "title": "My Plots",
+    "description": "All registered plots and their current operational status",
+    "registerPlot": "Register Plot",
+    "filters": {
+      "search": "Search plots...",
+      "allStatuses": "All statuses",
+      "allCrops": "All crops",
+      "allOriginators": "All originators",
+      "clearFilters": "Clear filters"
+    },
+    "empty": {
+      "title": "No plots registered yet",
+      "body": "Register your first productive plot to start the scoring and financing process.",
+      "cta": "Register First Plot"
+    },
+    "emptyFiltered": {
+      "title": "No plots match current filters",
+      "body": "Try adjusting your search or filter criteria."
+    },
+    "table": {
+      "plot": "Plot",
+      "originator": "Originator",
+      "cropRegion": "Crop · Region",
+      "area": "Area",
+      "yield": "Yield",
+      "docs": "Docs",
+      "status": "Status",
+      "action": "Action"
+    },
+    "mobile": {
+      "originator": "Originator",
+      "season": "Season",
+      "docs": "docs"
+    },
+    "summary": "Showing {{filtered}} of {{total}} plot",
+    "summaryPlural": "Showing {{filtered}} of {{total}} plots",
+    "status": {
+      "draft": "Draft",
+      "registered": "Registered",
+      "ready_for_scoring": "Ready for Scoring",
+      "scored": "Scored",
+      "vpc_issued": "VPC Issued",
+      "under_review": "Under Review",
+      "pre_approved": "Pre-Approved",
+      "rejected": "Rejected"
+    },
+    "action": {
+      "continueRegistration": "Continue registration",
+      "addEvidence": "Add evidence",
+      "generateScore": "Generate score",
+      "issueVpc": "Issue VPC",
+      "sendToReview": "Send to review",
+      "viewReview": "View review",
+      "viewSimulation": "View simulation"
+    }
+  },
+
+  "financing": {
+    "title": "Financing Review",
+    "description": "Pre-approved financing candidates based on auditable claims",
+    "stats": {
+      "candidates": "Candidates",
+      "candidatesSub": "pre-approved plots",
+      "eligible": "Eligible Total",
+      "eligibleSub": "combined eligible amount",
+      "approved": "Approved Capital",
+      "approvedSub": "of total"
+    },
+    "candidate": {
+      "score": "Score",
+      "yield": "Est. Yield",
+      "eligible": "Eligible Amount",
+      "approved": "Approved",
+      "type": "Type",
+      "days": "days remaining",
+      "fund": "Fund This Lot",
+      "viewDetails": "View Details"
+    }
+  },
+
+  "simulation": {
+    "title": "Outcome Simulation",
+    "description": "Repayment scenario modeling for harvest cycle closure and fund distribution",
+    "scenario": {
+      "title": "Scenario: Successful Harvest",
+      "badge": "Simulation"
+    },
+    "fields": {
+      "projectedYield": "Projected Yield",
+      "actualYield": "Actual Yield",
+      "pricePerKg": "Price/Kg",
+      "totalRevenue": "Total Revenue"
+    },
+    "distribution": {
+      "title": "Repayment Distribution",
+      "financier": "Financier Repayment",
+      "financierNote": "Return on eligible amount of",
+      "producer": "Producer Net",
+      "producerNote": "After repaying financing obligations",
+      "ratioLabel": "Performance Ratio",
+      "ratioNote": "Harvest exceeded projections. Both parties receive proportional distribution."
+    },
+    "runBtn": "Run Outcome Simulation",
+    "completeBtn": "Simulation Complete",
+    "disclaimer": "⚠️ This is a simulation for demo purposes. Amounts and scenarios are illustrative."
+  },
+
+  "opportunities": {
+    "title": "Investment Opportunities",
+    "description": "Browse approved pre-harvest financing opportunities with onchain traceability",
+    "filterAll": "All",
+    "filterPublished": "Open",
+    "filterFunded": "Funded",
+    "filterRepaid": "Repaid",
+    "sortLabel": "Sort by",
+    "sortReturn": "Highest return",
+    "sortScore": "Highest score",
+    "sortFunding": "Funding deadline",
+    "empty": "No opportunities available right now. Check back soon.",
+    "stats": {
+      "open": "Open",
+      "openSub": "accepting investment",
+      "totalCapital": "Total Capital",
+      "totalCapitalSub": "across all opportunities",
+      "avgReturn": "Avg. Return",
+      "avgReturnSub": "annualised rate"
+    },
+    "card": {
+      "riskBand": "Risk Band",
+      "score": "Score",
+      "targetRaise": "Target Raise",
+      "funded": "Funded",
+      "tenor": "Tenor",
+      "return": "Return",
+      "minTicket": "Min. Ticket",
+      "evidenceDocs": "Evidence docs",
+      "investors": "investors",
+      "deadline": "Deadline",
+      "viewDetail": "View Details",
+      "fundNow": "Fund Now",
+      "status": {
+        "published": "Open",
+        "funded": "Fully Funded",
+        "closed": "Closed",
+        "repaid": "Repaid"
+      }
+    }
+  },
+
+  "opportunityDetail": {
+    "backToList": "← Back to Opportunities",
+    "badge": {
+      "published": "Open for Funding",
+      "funded": "Fully Funded",
+      "closed": "Closed",
+      "repaid": "Repaid"
+    },
+    "sections": {
+      "originator": "Originator",
+      "lot": "Lot Summary",
+      "production": "Production Snapshot",
+      "scorecard": "Score Breakdown",
+      "evidence": "Evidence Summary",
+      "financing": "Financing Ask",
+      "repayment": "Repayment Logic",
+      "onchain": "Onchain Reference",
+      "invest": "Invest"
+    },
+    "originator": {
+      "type": "Type",
+      "country": "Country",
+      "region": "Region"
+    },
+    "lot": {
+      "crop": "Crop",
+      "area": "Area",
+      "region": "Region",
+      "stage": "Current Stage",
+      "harvest": "Est. Harvest"
+    },
+    "production": {
+      "expectedYield": "Expected Yield",
+      "historicalAvg": "Hist. 3yr Avg",
+      "pricePerTon": "Ref. Price / Ton",
+      "financingNeeded": "Financing Needed"
+    },
+    "scorecard": {
+      "completeness": "Completeness",
+      "production": "Production",
+      "evidence": "Evidence",
+      "risk": "Risk",
+      "overall": "Overall Score",
+      "riskBand": "Risk Band",
+      "recommendedAmount": "Recommended Amount",
+      "recommendedTenor": "Recommended Tenor",
+      "days": "days"
+    },
+    "evidence": {
+      "docs": "documents submitted",
+      "verificationStatus": {
+        "pending": "Pending",
+        "verified": "Verified",
+        "rejected": "Rejected"
+      }
+    },
+    "financing": {
+      "targetRaise": "Target Raise",
+      "minTicket": "Min. Ticket",
+      "currency": "Currency",
+      "tenor": "Tenor",
+      "deadline": "Funding Deadline",
+      "raised": "Raised",
+      "investors": "Investors"
+    },
+    "repayment": {
+      "structure": "Structure",
+      "structureValue": "Bullet repayment at harvest. Principal + fixed return paid in full at settlement.",
+      "returnLabel": "Expected Return",
+      "bpsLabel": "basis points",
+      "note": "Return is paid from harvest revenue. The onchain settlement record provides an auditable repayment trail."
+    },
+    "onchain": {
+      "vpcId": "VPC ID",
+      "reference": "Onchain Reference",
+      "note": "This opportunity is backed by a Verified Production Claim (VPC) recorded on the Stellar network."
+    },
+    "invest": {
+      "title": "Invest in this Opportunity",
+      "subtitle": "Connect your wallet and specify an amount to fund this lot.",
+      "amountLabel": "Investment Amount (USD)",
+      "amountPlaceholder": "e.g. 500",
+      "minNote": "Minimum ticket:",
+      "walletLabel": "Wallet Address",
+      "walletPlaceholder": "GXXXX... (Stellar)",
+      "submitBtn": "Confirm Investment",
+      "submitting": "Processing...",
+      "successTitle": "Investment submitted",
+      "successDesc": "Your position has been recorded. The tx hash will appear once confirmed onchain.",
+      "alreadyFunded": "This opportunity is fully funded.",
+      "validation": {
+        "amount": "Enter a valid amount",
+        "minTicket": "Amount must be at least the minimum ticket",
+        "wallet": "Enter a wallet address"
+      }
+    }
+  },
+
+  "assetCard": {
+    "lot": "Lot",
+    "producer": "Producer",
+    "location": "Location",
+    "estimatedYield": "Est. Yield",
+    "score": "Score",
+    "txHash": "Tx Hash",
+    "issuedAt": "Issued",
+    "status": {
+      "active": "Active",
+      "minted": "Minted",
+      "pending": "Pending"
+    }
+  },
+
+  "common": {
+    "unknown": "Unknown",
+    "registerPlot": "Register Plot",
+    "mvpDemo": "MVP Demo · Hackathon Build",
+    "sufficient": "sufficient documentation",
+    "insufficient": "insufficient documentation",
+    "ton": "Ton",
+    "ha": "ha",
+    "na": "N/A"
+  }
+}

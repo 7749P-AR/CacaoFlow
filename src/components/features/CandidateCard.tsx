@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import type { FinancingCandidate } from "@/lib/mockData";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useT } from "@/hooks/useT";
 
 interface CandidateCardProps {
   candidate: FinancingCandidate;
@@ -18,12 +19,13 @@ interface CandidateCardProps {
 
 export function CandidateCard({ candidate, delay = 0 }: CandidateCardProps) {
   const [approved, setApproved] = useState(false);
+  const { t } = useT();
   const progress = (candidate.approvedAmount / candidate.eligibleAmount) * 100;
 
   const handleApprove = () => {
     setApproved(true);
-    toast.success("Financing approved", {
-      description: `Plot ${candidate.lotId} has been approved. The VPC auditable claim is now active.`,
+    toast.success(t("financing.candidate.fund"), {
+      description: `Plot ${candidate.lotId} — VPC claim financed.`,
     });
   };
 
@@ -55,17 +57,17 @@ export function CandidateCard({ candidate, delay = 0 }: CandidateCardProps) {
             </div>
             <div className="flex items-center gap-1.5 text-muted-foreground">
               <Calendar className="h-3 w-3" />
-              <span>{candidate.daysRemaining}d remaining</span>
+              <span>{candidate.daysRemaining} {t("financing.candidate.days")}</span>
             </div>
           </div>
 
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Estimated yield</span>
-              <span className="font-medium tabular-nums">{candidate.yieldEstimated} Ton</span>
+              <span className="text-muted-foreground">{t("financing.candidate.yield")}</span>
+              <span className="font-medium tabular-nums">{candidate.yieldEstimated} {t("common.ton")}</span>
             </div>
             <div className="flex justify-between text-sm">
-              <span className="text-muted-foreground">Eligible amount</span>
+              <span className="text-muted-foreground">{t("financing.candidate.eligible")}</span>
               <span className="font-medium tabular-nums">${candidate.eligibleAmount.toLocaleString()} USD</span>
             </div>
           </div>
@@ -84,12 +86,12 @@ export function CandidateCard({ candidate, delay = 0 }: CandidateCardProps) {
             disabled={approved}
             onClick={handleApprove}
           >
-            {approved ? "Financing Approved ✓" : "Approve Financing"}
+            {approved ? `${t("financing.candidate.fund")} ✓` : t("financing.candidate.fund")}
           </Button>
 
           {approved && (
             <Badge variant="success" className="w-full justify-center py-1">
-              VPC claim financed successfully
+              {t("financing.candidate.approved")}
             </Badge>
           )}
         </CardContent>

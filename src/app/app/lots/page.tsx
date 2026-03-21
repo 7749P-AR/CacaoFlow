@@ -27,35 +27,47 @@ import {
 import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import type { PlotStatus, Plot } from "@/lib/types";
+import { useT } from "@/hooks/useT";
 
-// ─── Status config ───────────────────────────────────────────
+// ─── Status config (variants only — labels come from i18n) ──────────
 
-const STATUS_CONFIG: Record<PlotStatus, { label: string; variant: "default" | "success" | "warning" | "accent" | "destructive" | "outline"; order: number }> = {
-  draft:             { label: "Draft",             variant: "outline",     order: 0 },
-  registered:        { label: "Registered",        variant: "accent",      order: 1 },
-  ready_for_scoring: { label: "Ready for Scoring", variant: "warning",     order: 2 },
-  scored:            { label: "Scored",             variant: "default",     order: 3 },
-  vpc_issued:        { label: "VPC Issued",         variant: "default",     order: 4 },
-  under_review:      { label: "Under Review",       variant: "warning",     order: 5 },
-  pre_approved:      { label: "Pre-Approved",       variant: "success",     order: 6 },
-  rejected:          { label: "Rejected",           variant: "destructive", order: 7 },
+const STATUS_VARIANT: Record<PlotStatus, "default" | "success" | "warning" | "accent" | "destructive" | "outline"> = {
+  draft:             "outline",
+  registered:        "accent",
+  ready_for_scoring: "warning",
+  scored:            "default",
+  vpc_issued:        "default",
+  under_review:      "warning",
+  pre_approved:      "success",
+  rejected:          "destructive",
 };
 
-const NEXT_ACTION: Record<PlotStatus, { label: string; icon: React.ElementType; href?: string } | null> = {
-  draft:             { label: "Continue registration", icon: ArrowRight, href: "/app/register" },
-  registered:        { label: "Add evidence",          icon: FileText },
-  ready_for_scoring: { label: "Generate score",        icon: BarChart3 },
-  scored:            { label: "Issue VPC",             icon: Shield },
-  vpc_issued:        { label: "Send to review",        icon: Send },
-  under_review:      { label: "View review",           icon: Eye,       href: "/app/financing" },
-  pre_approved:      { label: "View simulation",       icon: Eye,       href: "/app/simulation" },
-  rejected:          null,
+const STATUS_ORDER: Record<PlotStatus, number> = {
+  draft: 0, registered: 1, ready_for_scoring: 2, scored: 3,
+  vpc_issued: 4, under_review: 5, pre_approved: 6, rejected: 7,
 };
 
 // ─── Component ───────────────────────────────────────────────
 
 export default function MyLotsPage() {
   const { plots, originators, documents } = useAppStore();
+  const { t } = useT();
+
+  const STATUS_CONFIG = (Object.keys(STATUS_VARIANT) as PlotStatus[]).reduce((acc, key) => {
+    acc[key] = { label: t(`lots.status.${key}`), variant: STATUS_VARIANT[key], order: STATUS_ORDER[key] };
+    return acc;
+  }, {} as Record<PlotStatus, { label: string; variant: typeof STATUS_VARIANT[PlotStatus]; order: number }>);
+
+  const NEXT_ACTION: Record<PlotStatus, { label: string; icon: React.ElementType; href?: string } | null> = {
+    draft:             { label: t("lots.action.continueRegistration"), icon: ArrowRight, href: "/app/register" },
+    registered:        { label: t("lots.action.addEvidence"),          icon: FileText },
+    ready_for_scoring: { label: t("lots.action.generateScore"),        icon: BarChart3 },
+    scored:            { label: t("lots.action.issueVpc"),             icon: Shield },
+    vpc_issued:        { label: t("lots.action.sendToReview"),         icon: Send },
+    under_review:      { label: t("lots.action.viewReview"),           icon: Eye, href: "/app/financing" },
+    pre_approved:      { label: t("lots.action.viewSimulation"),       icon: Eye, href: "/app/simulation" },
+    rejected:          null,
+  };
 
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -101,8 +113,8 @@ export default function MyLotsPage() {
 
     // Sort: actionable first (lower order number = needs action sooner), then by created_at desc
     result.sort((a, b) => {
-      const orderA = STATUS_CONFIG[a.status]?.order ?? 99;
-      const orderB = STATUS_CONFIG[b.status]?.order ?? 99;
+      const orderA = STATUS_ORDER[a.status] ?? 99;
+      const orderB = STATUS_ORDER[b.status] ?? 99;
       if (orderA !== orderB) return orderA - orderB;
       return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     });
@@ -111,7 +123,7 @@ export default function MyLotsPage() {
   }, [plots, searchQuery, statusFilter, cropFilter, originatorFilter]);
 
   function getOriginatorName(id: string) {
-    return originators.find((o) => o.id === id)?.name ?? "Unknown";
+    return originators.find((o) => o.id === id)?.name ?? t("common.unknown");
   }
 
   function getDocCount(plotId: string) {
@@ -122,11 +134,11 @@ export default function MyLotsPage() {
 
   return (
     <>
-      <PageHeader title="My Plots" description="All registered plots and their current operational status">
+      <PageHeader title={t("lots.title")} description={t("lots.description")}>
         <Link href="/app/register">
           <Button variant="accent" size="sm">
             <Plus className="h-4 w-4 mr-1" />
-            Register Plot
+            {t("lots.registerPlot")}
           </Button>
         </Link>
       </PageHeader>
@@ -137,7 +149,7 @@ export default function MyLotsPage() {
           <div className="relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search plots..."
+              placeholder={t("lots.filters.search")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9"
@@ -147,10 +159,10 @@ export default function MyLotsPage() {
         <div className="w-44">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="text-xs">
-              <SelectValue placeholder="Status" />
+              <SelectValue placeholder={t("lots.filters.allStatuses")} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
+              <SelectItem value="all">{t("lots.filters.allStatuses")}</SelectItem>
               {(Object.keys(STATUS_CONFIG) as PlotStatus[]).map((s) => (
                 <SelectItem key={s} value={s}>{STATUS_CONFIG[s].label}</SelectItem>
               ))}
@@ -161,10 +173,10 @@ export default function MyLotsPage() {
           <div className="w-40">
             <Select value={cropFilter} onValueChange={setCropFilter}>
               <SelectTrigger className="text-xs">
-                <SelectValue placeholder="Crop" />
+                <SelectValue placeholder={t("lots.filters.allCrops")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All crops</SelectItem>
+                <SelectItem value="all">{t("lots.filters.allCrops")}</SelectItem>
                 {uniqueCrops.map((c) => (
                   <SelectItem key={c} value={c}>{c}</SelectItem>
                 ))}
@@ -176,10 +188,10 @@ export default function MyLotsPage() {
           <div className="w-48">
             <Select value={originatorFilter} onValueChange={setOriginatorFilter}>
               <SelectTrigger className="text-xs">
-                <SelectValue placeholder="Originator" />
+                <SelectValue placeholder={t("lots.filters.allOriginators")} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All originators</SelectItem>
+                <SelectItem value="all">{t("lots.filters.allOriginators")}</SelectItem>
                 {usedOriginators.map((o) => (
                   <SelectItem key={o.id} value={o.id}>{o.name}</SelectItem>
                 ))}
@@ -202,14 +214,14 @@ export default function MyLotsPage() {
               <div className="mx-auto h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                 <Leaf className="h-8 w-8 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold mb-1">No plots registered yet</h3>
+              <h3 className="text-lg font-semibold mb-1">{t("lots.empty.title")}</h3>
               <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
-                Register your first productive plot to start the scoring and financing process.
+                {t("lots.empty.body")}
               </p>
               <Link href="/app/register">
                 <Button variant="accent">
                   <Plus className="h-4 w-4 mr-1" />
-                  Register First Plot
+                  {t("lots.empty.cta")}
                 </Button>
               </Link>
             </CardContent>
@@ -220,10 +232,10 @@ export default function MyLotsPage() {
         <Card className="mt-2">
           <CardContent className="py-12 text-center">
             <Search className="h-8 w-8 text-muted-foreground/50 mx-auto mb-3" />
-            <h3 className="text-sm font-semibold mb-1">No plots match current filters</h3>
-            <p className="text-xs text-muted-foreground">Try adjusting your search or filter criteria.</p>
+            <h3 className="text-sm font-semibold mb-1">{t("lots.emptyFiltered.title")}</h3>
+            <p className="text-xs text-muted-foreground">{t("lots.emptyFiltered.body")}</p>
             <Button variant="outline" size="sm" className="mt-4" onClick={() => { setSearchQuery(""); setStatusFilter("all"); setCropFilter("all"); setOriginatorFilter("all"); }}>
-              Clear filters
+              {t("lots.filters.clearFilters")}
             </Button>
           </CardContent>
         </Card>
@@ -236,14 +248,14 @@ export default function MyLotsPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b border-border text-xs text-muted-foreground uppercase tracking-wider">
-                      <th className="text-left py-3 px-4 font-medium">Plot</th>
-                      <th className="text-left py-3 px-4 font-medium">Originator</th>
-                      <th className="text-left py-3 px-4 font-medium">Crop · Region</th>
-                      <th className="text-right py-3 px-4 font-medium">Area</th>
-                      <th className="text-right py-3 px-4 font-medium">Yield</th>
-                      <th className="text-center py-3 px-4 font-medium">Docs</th>
-                      <th className="text-left py-3 px-4 font-medium">Status</th>
-                      <th className="text-right py-3 px-4 font-medium">Action</th>
+                      <th className="text-left py-3 px-4 font-medium">{t("lots.table.plot")}</th>
+                      <th className="text-left py-3 px-4 font-medium">{t("lots.table.originator")}</th>
+                      <th className="text-left py-3 px-4 font-medium">{t("lots.table.cropRegion")}</th>
+                      <th className="text-right py-3 px-4 font-medium">{t("lots.table.area")}</th>
+                      <th className="text-right py-3 px-4 font-medium">{t("lots.table.yield")}</th>
+                      <th className="text-center py-3 px-4 font-medium">{t("lots.table.docs")}</th>
+                      <th className="text-left py-3 px-4 font-medium">{t("lots.table.status")}</th>
+                      <th className="text-right py-3 px-4 font-medium">{t("lots.table.action")}</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -274,8 +286,8 @@ export default function MyLotsPage() {
                             </span>
                             <span className="text-xs text-muted-foreground">{plot.region}, {plot.country}</span>
                           </td>
-                          <td className="py-3 px-4 text-right tabular-nums">{plot.area_hectares} ha</td>
-                          <td className="py-3 px-4 text-right tabular-nums">{plot.expected_yield_tons} Ton</td>
+                          <td className="py-3 px-4 text-right tabular-nums">{plot.area_hectares} {t("common.ha")}</td>
+                          <td className="py-3 px-4 text-right tabular-nums">{plot.expected_yield_tons} {t("common.ton")}</td>
                           <td className="py-3 px-4 text-center">
                             <Badge variant={docCount > 0 ? "outline" : "destructive"} className="text-[10px]">
                               {docCount}
@@ -339,15 +351,16 @@ export default function MyLotsPage() {
                       <div className="flex flex-wrap gap-3 text-xs text-muted-foreground">
                         <span className="flex items-center gap-1"><Sprout className="h-3 w-3" />{plot.crop_type}</span>
                         <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{plot.region}, {plot.country}</span>
-                        <span className="flex items-center gap-1"><Ruler className="h-3 w-3" />{plot.area_hectares} ha</span>
-                        <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />{plot.expected_yield_tons} Ton</span>
-                        <span className="flex items-center gap-1"><FileText className="h-3 w-3" />{docCount} docs</span>
+                        <span className="flex items-center gap-1.5"><Ruler className="h-3 w-3" />{plot.area_hectares} {t("common.ha")}</span>
+                        <span className="flex items-center gap-1.5"><Calendar className="h-3 w-3" />{plot.expected_yield_tons} {t("common.ton")}</span>
+                        <span className="flex items-center gap-1.5"><FileText className="h-3 w-3" />{docCount} {t("lots.mobile.docs")}</span>
                       </div>
 
                       {/* Row 3: originator */}
                       <p className="text-xs text-muted-foreground">
-                        Originator: <span className="text-foreground font-medium">{getOriginatorName(plot.originator_id)}</span>
-                        {" · "}Season: <span className="text-foreground font-medium">{plot.season_label}</span>
+                        {t("lots.mobile.originator")}: <span className="text-foreground font-medium">{getOriginatorName(plot.originator_id)}</span>
+                        {" · "}
+                        {t("lots.mobile.season")}: <span className="text-foreground font-medium">{plot.season_label}</span>
                       </p>
 
                       {/* Row 4: action */}
@@ -377,7 +390,9 @@ export default function MyLotsPage() {
 
           {/* Summary */}
           <p className="text-xs text-muted-foreground text-center">
-            Showing {filteredPlots.length} of {plots.length} plot{plots.length !== 1 ? "s" : ""}
+            {filteredPlots.length !== plots.length
+              ? t(plots.length !== 1 ? "lots.summaryPlural" : "lots.summary", { filtered: filteredPlots.length, total: plots.length })
+              : t(plots.length !== 1 ? "lots.summaryPlural" : "lots.summary", { filtered: filteredPlots.length, total: plots.length })}
           </p>
         </>
       )}

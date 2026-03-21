@@ -1,0 +1,525 @@
+{
+  "nav": {
+    "brand": "Aleph Cacao",
+    "dashboard": "Dashboard",
+    "myPlots": "Mis Lotes",
+    "registerPlot": "Registrar Lote",
+    "opportunities": "Oportunidades",
+    "financingReview": "Revisión de Financiamiento",
+    "outcomeSimulation": "Simulación de Resultados",
+    "connected": "Testnet Conectado",
+    "lang": {
+      "en": "English",
+      "es": "Español"
+    }
+  },
+
+  "landing": {
+    "badge": "Protocolo RWA · Financiamiento Pre-Cosecha",
+    "hero": {
+      "title1": "De la tierra a la cadena.",
+      "title2": "Suscripción estructurada",
+      "title3": "para pre-cosecha de cacao.",
+      "subtitle": "Convertimos proyecciones de cosecha en Reclamos de Producción Verificados (VPCs) auditables. Scoring automatizado, emisión on-chain y acceso estructurado a capital — construido para originadores agrícolas."
+    },
+    "cta": {
+      "originator": "Registrar un Lote",
+      "investor": "Ver Oportunidades"
+    },
+    "flow": {
+      "title": "Cómo funciona",
+      "subtitle": "Del registro al financiamiento en cuatro pasos",
+      "step1": { "title": "Registra tu lote", "desc": "Ingresa datos de producción, ubicación y tipo de cacao. Sube documentos de evidencia." },
+      "step2": { "title": "Scoring automático", "desc": "Nuestro motor calcula el rendimiento estimado, puntaje de consistencia y nivel de riesgo." },
+      "step3": { "title": "Emisión de VPC", "desc": "Se genera un Reclamo de Producción Verificado auditable y se ancla en la cadena." },
+      "step4": { "title": "Financiamiento de inversores", "desc": "Las oportunidades aprobadas quedan disponibles para inversores con total transparencia." }
+    },
+    "roles": {
+      "title": "Dos roles. Una plataforma.",
+      "originator": {
+        "title": "Originador",
+        "desc": "Productores y cooperativas registran lotes, presentan evidencia y acceden a capital pre-cosecha estructurado.",
+        "cta": "Comenzar como Originador"
+      },
+      "investor": {
+        "title": "Inversor",
+        "desc": "Explora oportunidades con puntaje y respaldo VPC. Revisa riesgo, rendimiento y términos de financiamiento antes de comprometer capital.",
+        "cta": "Ver Oportunidades"
+      }
+    },
+    "trust": {
+      "title": "Construido para confianza institucional",
+      "item1": { "title": "Trazabilidad completa", "desc": "Cada lote tiene un registro auditable desde el día cero." },
+      "item2": { "title": "Datos verificables", "desc": "Scoring basado en datos agrícolas reales y proyecciones calibradas." },
+      "item3": { "title": "Reclamos on-chain", "desc": "VPCs respaldados por datos reales de producción, verificables en cadena." }
+    },
+    "finalCta": {
+      "title": "Liquidez para la cosecha de mañana.",
+      "subtitle": "Comienza a digitalizar tu producción hoy.",
+      "btn": "Comenzar Ahora"
+    },
+    "footer": {
+      "brand": "Aleph Cacao © 2026",
+      "tagline": "Demo MVP · Proyecto Hackathon"
+    }
+  },
+
+  "overview": {
+    "title": "Resumen",
+    "description": "Panel general de Aleph Cacao",
+    "stats": {
+      "plots": "Lotes Activos",
+      "plotsSub": "registrados",
+      "yield": "Rendimiento Est. Total",
+      "readyForScoring": "Listos para Scoring",
+      "readyForScoringSub": "lotes con evidencia",
+      "documents": "Documentos",
+      "documentsSub": "evidencia subida"
+    },
+    "actions": {
+      "register": { "label": "Registrar Lote", "desc": "Crea un nuevo lote con originador y evidencia" },
+      "lots": { "label": "Mis Lotes", "desc": "Ver todos los lotes y su estado operativo" },
+      "financing": { "label": "Revisión de Financiamiento", "desc": "Revisar candidatos pre-aprobados para financiamiento" }
+    },
+    "recentPlots": {
+      "title": "Lotes Recientes",
+      "viewAll": "Ver todos →",
+      "empty": "Sin lotes aún. Registra tu primer lote para comenzar.",
+      "registerFirst": "Registrar Lote"
+    },
+    "table": {
+      "plot": "Lote",
+      "originator": "Originador",
+      "crop": "Cultivo",
+      "region": "Región",
+      "yield": "Rendimiento",
+      "docs": "Docs",
+      "status": "Estado"
+    }
+  },
+
+  "register": {
+    "title": "Registrar Nuevo Lote",
+    "description": "Crea un registro de lote con originador, datos de producción y evidencia.",
+    "sections": {
+      "originator": "Originador",
+      "plot": "Datos del Lote",
+      "production": "Producción",
+      "evidence": "Evidencia",
+      "review": "Revisión"
+    },
+    "originator": {
+      "title": "Originador",
+      "subtitle": "Selecciona un originador existente o crea uno nuevo",
+      "selectExisting": "Seleccionar existente",
+      "createNew": "Crear nuevo",
+      "selectLabel": "Originador",
+      "selectPlaceholder": "Seleccionar originador...",
+      "name": "Nombre",
+      "namePlaceholder": "Cooperativa San Martín",
+      "type": "Tipo",
+      "region": "Región",
+      "regionPlaceholder": "Huila, Colombia",
+      "district": "Distrito / Municipio",
+      "districtPlaceholder": "Pitalito",
+      "contactName": "Nombre de Contacto",
+      "contactNamePlaceholder": "Juan Pérez",
+      "contactEmail": "Correo de Contacto",
+      "contactEmailPlaceholder": "juan@coop.co",
+      "types": {
+        "producer": "Productor",
+        "cooperative": "Cooperativa"
+      }
+    },
+    "plot": {
+      "title": "Datos del Lote",
+      "name": "Nombre del Lote",
+      "namePlaceholder": "Finca El Progreso – Lote Norte",
+      "cropType": "Tipo de Cultivo",
+      "cropPlaceholder": "Seleccionar cultivo...",
+      "season": "Temporada",
+      "seasonPlaceholder": "2026-A",
+      "country": "País",
+      "countryPlaceholder": "Colombia",
+      "region": "Región",
+      "regionPlaceholder": "Huila",
+      "district": "Distrito",
+      "districtPlaceholder": "La Plata",
+      "area": "Área (hectáreas)",
+      "landTenure": "Tenencia de Tierra",
+      "irrigation": "Irrigación",
+      "cropStage": "Etapa Actual del Cultivo",
+      "locationNote": "Nota de Ubicación (opcional)",
+      "locationNotePlaceholder": "Ej. Cerca del río, sector 3",
+      "landTenureTypes": {
+        "owned": "Propia",
+        "leased": "Arrendada",
+        "communal": "Comunal",
+        "other": "Otra"
+      },
+      "irrigationTypes": {
+        "rainfed": "Secano",
+        "irrigated": "Irrigado",
+        "mixed": "Mixto"
+      },
+      "cropStages": {
+        "planting": "Siembra",
+        "vegetative": "Vegetativo",
+        "flowering": "Floración",
+        "fruit_development": "Desarrollo del Fruto",
+        "pre_harvest": "Pre-Cosecha",
+        "harvest": "Cosecha"
+      }
+    },
+    "production": {
+      "title": "Detalles de Producción",
+      "yield": "Rendimiento Esperado (toneladas)",
+      "yieldNote": "Producción estimada para esta temporada en toneladas métricas.",
+      "harvestDate": "Fecha Estimada de Cosecha",
+      "about": {
+        "title": "Sobre la estimación de rendimiento",
+        "body": "Este dato será la base del motor de scoring. Proporciona tu mejor estimación realista para esta temporada."
+      }
+    },
+    "evidence": {
+      "title": "Documentos de Evidencia",
+      "subtitle": "Se requiere al menos 1 documento para marcar el lote como",
+      "ready": "listo_para_scoring",
+      "fileName": "Nombre del Archivo",
+      "fileNamePlaceholder": "certificado_tierra_2026.pdf",
+      "type": "Tipo",
+      "noDocsTitle": "Sin documentos aún",
+      "noDocsBody": "Sin evidencia, el lote se guardará como registrado (no listo para scoring).",
+      "mvpNote": {
+        "title": "Nota MVP",
+        "body": "En esta demo, los documentos se registran solo por nombre. En producción, las cargas de archivos irían a almacenamiento en la nube."
+      },
+      "docTypes": {
+        "identity_document": "Documento de Identidad",
+        "land_record": "Registro de Tierra",
+        "yield_history": "Historial de Rendimiento",
+        "crop_plan": "Plan de Cultivo",
+        "field_photos": "Fotos de Campo",
+        "offtake_agreement": "Contrato de Compra",
+        "bank_statement": "Estado de Cuenta",
+        "other": "Otro"
+      }
+    },
+    "review": {
+      "title": "Revisar Antes de Enviar",
+      "originator": "Originador",
+      "noOriginator": "Sin originador seleccionado",
+      "plot": "Lote",
+      "production": "Producción",
+      "evidence": "Evidencia",
+      "noEvidence": "Sin documentos — el lote se guardará como registrado",
+      "statusPreview": "Luego del envío, este lote quedará:",
+      "labels": {
+        "name": "Nombre",
+        "crop": "Cultivo",
+        "location": "Ubicación",
+        "area": "Área",
+        "season": "Temporada",
+        "expectedYield": "Rendimiento Esperado",
+        "harvestDate": "Fecha de Cosecha"
+      }
+    },
+    "nav": {
+      "back": "Atrás",
+      "next": "Siguiente",
+      "submit": "Registrar Lote",
+      "saving": "Guardando..."
+    },
+    "toast": {
+      "success": "Lote registrado exitosamente",
+      "error": "Error al registrar el lote",
+      "enterFileName": "Ingresa un nombre de archivo"
+    },
+    "validation": {
+      "selectOriginator": "Selecciona un originador",
+      "originatorName": "El nombre del originador es requerido",
+      "originatorRegion": "La región es requerida",
+      "plotName": "El nombre del lote es requerido",
+      "cropType": "El tipo de cultivo es requerido",
+      "country": "El país es requerido",
+      "region": "La región es requerida",
+      "area": "El área debe ser mayor a 0",
+      "season": "La temporada es requerida",
+      "yield": "El rendimiento esperado debe ser mayor a 0"
+    }
+  },
+
+  "lots": {
+    "title": "Mis Lotes",
+    "description": "Todos los lotes registrados y su estado operativo actual",
+    "registerPlot": "Registrar Lote",
+    "filters": {
+      "search": "Buscar lotes...",
+      "allStatuses": "Todos los estados",
+      "allCrops": "Todos los cultivos",
+      "allOriginators": "Todos los originadores",
+      "clearFilters": "Limpiar filtros"
+    },
+    "empty": {
+      "title": "Sin lotes registrados aún",
+      "body": "Registra tu primer lote productivo para iniciar el proceso de scoring y financiamiento.",
+      "cta": "Registrar Primer Lote"
+    },
+    "emptyFiltered": {
+      "title": "Ningún lote coincide con los filtros",
+      "body": "Intenta ajustar tu búsqueda o criterios de filtro."
+    },
+    "table": {
+      "plot": "Lote",
+      "originator": "Originador",
+      "cropRegion": "Cultivo · Región",
+      "area": "Área",
+      "yield": "Rendimiento",
+      "docs": "Docs",
+      "status": "Estado",
+      "action": "Acción"
+    },
+    "mobile": {
+      "originator": "Originador",
+      "season": "Temporada",
+      "docs": "docs"
+    },
+    "summary": "Mostrando {{filtered}} de {{total}} lote",
+    "summaryPlural": "Mostrando {{filtered}} de {{total}} lotes",
+    "status": {
+      "draft": "Borrador",
+      "registered": "Registrado",
+      "ready_for_scoring": "Listo para Scoring",
+      "scored": "Puntuado",
+      "vpc_issued": "VPC Emitido",
+      "under_review": "En Revisión",
+      "pre_approved": "Pre-Aprobado",
+      "rejected": "Rechazado"
+    },
+    "action": {
+      "continueRegistration": "Continuar registro",
+      "addEvidence": "Agregar evidencia",
+      "generateScore": "Generar scoring",
+      "issueVpc": "Emitir VPC",
+      "sendToReview": "Enviar a revisión",
+      "viewReview": "Ver revisión",
+      "viewSimulation": "Ver simulación"
+    }
+  },
+
+  "financing": {
+    "title": "Revisión de Financiamiento",
+    "description": "Candidatos de financiamiento pre-aprobados basados en reclamos auditables",
+    "stats": {
+      "candidates": "Candidatos",
+      "candidatesSub": "lotes pre-aprobados",
+      "eligible": "Total Elegible",
+      "eligibleSub": "monto elegible combinado",
+      "approved": "Capital Aprobado",
+      "approvedSub": "del total"
+    },
+    "candidate": {
+      "score": "Puntaje",
+      "yield": "Rendimiento Est.",
+      "eligible": "Monto Elegible",
+      "approved": "Aprobado",
+      "type": "Tipo",
+      "days": "días restantes",
+      "fund": "Financiar Este Lote",
+      "viewDetails": "Ver Detalles"
+    }
+  },
+
+  "simulation": {
+    "title": "Simulación de Resultados",
+    "description": "Modelado de escenario de repago para cierre del ciclo de cosecha y distribución de fondos",
+    "scenario": {
+      "title": "Escenario: Cosecha Exitosa",
+      "badge": "Simulación"
+    },
+    "fields": {
+      "projectedYield": "Rendimiento Proyectado",
+      "actualYield": "Rendimiento Real",
+      "pricePerKg": "Precio/Kg",
+      "totalRevenue": "Ingresos Totales"
+    },
+    "distribution": {
+      "title": "Distribución de Repago",
+      "financier": "Repago al Financiador",
+      "financierNote": "Retorno sobre monto elegible de",
+      "producer": "Neto del Productor",
+      "producerNote": "Luego de cumplir obligaciones de financiamiento",
+      "ratioLabel": "Ratio de Desempeño",
+      "ratioNote": "La cosecha superó las proyecciones. Ambas partes reciben distribución proporcional."
+    },
+    "runBtn": "Ejecutar Simulación de Resultados",
+    "completeBtn": "Simulación Completa",
+    "disclaimer": "⚠️ Esta es una simulación con fines de demostración. Los montos y escenarios son ilustrativos."
+  },
+
+  "opportunities": {
+    "title": "Oportunidades de Inversión",
+    "description": "Explora oportunidades aprobadas de financiamiento pre-cosecha con trazabilidad onchain",
+    "filterAll": "Todas",
+    "filterPublished": "Abiertas",
+    "filterFunded": "Financiadas",
+    "filterRepaid": "Pagadas",
+    "sortLabel": "Ordenar por",
+    "sortReturn": "Mayor retorno",
+    "sortScore": "Mayor puntaje",
+    "sortFunding": "Fecha límite",
+    "empty": "No hay oportunidades disponibles en este momento.",
+    "stats": {
+      "open": "Abiertas",
+      "openSub": "aceptando inversión",
+      "totalCapital": "Capital Total",
+      "totalCapitalSub": "en todas las oportunidades",
+      "avgReturn": "Retorno Promedio",
+      "avgReturnSub": "tasa anualizada"
+    },
+    "card": {
+      "riskBand": "Banda de Riesgo",
+      "score": "Puntaje",
+      "targetRaise": "Meta de Captación",
+      "funded": "Financiado",
+      "tenor": "Plazo",
+      "return": "Retorno",
+      "minTicket": "Ticket Mínimo",
+      "evidenceDocs": "Docs de evidencia",
+      "investors": "inversionistas",
+      "deadline": "Fecha Límite",
+      "viewDetail": "Ver Detalle",
+      "fundNow": "Financiar Ahora",
+      "status": {
+        "published": "Abierta",
+        "funded": "Completamente Financiada",
+        "closed": "Cerrada",
+        "repaid": "Pagada"
+      }
+    }
+  },
+
+  "opportunityDetail": {
+    "backToList": "← Volver a Oportunidades",
+    "badge": {
+      "published": "Abierta para Inversión",
+      "funded": "Completamente Financiada",
+      "closed": "Cerrada",
+      "repaid": "Pagada"
+    },
+    "sections": {
+      "originator": "Originador",
+      "lot": "Resumen del Lote",
+      "production": "Perfil de Producción",
+      "scorecard": "Desglose del Puntaje",
+      "evidence": "Resumen de Evidencia",
+      "financing": "Solicitud de Financiamiento",
+      "repayment": "Lógica de Repago",
+      "onchain": "Referencia Onchain",
+      "invest": "Invertir"
+    },
+    "originator": {
+      "type": "Tipo",
+      "country": "País",
+      "region": "Región"
+    },
+    "lot": {
+      "crop": "Cultivo",
+      "area": "Área",
+      "region": "Región",
+      "stage": "Etapa Actual",
+      "harvest": "Cosecha Est."
+    },
+    "production": {
+      "expectedYield": "Rendimiento Esperado",
+      "historicalAvg": "Prom. Hist. 3 años",
+      "pricePerTon": "Precio Ref. / Ton",
+      "financingNeeded": "Financiamiento Necesario"
+    },
+    "scorecard": {
+      "completeness": "Completitud",
+      "production": "Producción",
+      "evidence": "Evidencia",
+      "risk": "Riesgo",
+      "overall": "Puntaje General",
+      "riskBand": "Banda de Riesgo",
+      "recommendedAmount": "Monto Recomendado",
+      "recommendedTenor": "Plazo Recomendado",
+      "days": "días"
+    },
+    "evidence": {
+      "docs": "documentos presentados",
+      "verificationStatus": {
+        "pending": "Pendiente",
+        "verified": "Verificado",
+        "rejected": "Rechazado"
+      }
+    },
+    "financing": {
+      "targetRaise": "Meta de Captación",
+      "minTicket": "Ticket Mínimo",
+      "currency": "Moneda",
+      "tenor": "Plazo",
+      "deadline": "Fecha Límite",
+      "raised": "Captado",
+      "investors": "Inversionistas"
+    },
+    "repayment": {
+      "structure": "Estructura",
+      "structureValue": "Pago bullet al momento de la cosecha. Capital + retorno fijo pagados en su totalidad al liquidar.",
+      "returnLabel": "Retorno Esperado",
+      "bpsLabel": "puntos base",
+      "note": "El retorno se paga con los ingresos de la cosecha. El registro onchain ofrece un rastro de repago auditable."
+    },
+    "onchain": {
+      "vpcId": "ID del VPC",
+      "reference": "Referencia Onchain",
+      "note": "Esta oportunidad está respaldada por un Certificado de Producción Verificada (VPC) registrado en la red Stellar."
+    },
+    "invest": {
+      "title": "Invertir en esta Oportunidad",
+      "subtitle": "Conecta tu billetera e indica el monto a financiar.",
+      "amountLabel": "Monto de Inversión (USD)",
+      "amountPlaceholder": "Ej. 500",
+      "minNote": "Ticket mínimo:",
+      "walletLabel": "Dirección de Billetera",
+      "walletPlaceholder": "GXXXX... (Stellar)",
+      "submitBtn": "Confirmar Inversión",
+      "submitting": "Procesando...",
+      "successTitle": "Inversión enviada",
+      "successDesc": "Tu posición ha sido registrada. El tx hash aparecerá al confirmarse onchain.",
+      "alreadyFunded": "Esta oportunidad está completamente financiada.",
+      "validation": {
+        "amount": "Ingresa un monto válido",
+        "minTicket": "El monto debe ser al menos el ticket mínimo",
+        "wallet": "Ingresa una dirección de billetera"
+      }
+    }
+  },
+
+  "assetCard": {
+    "lot": "Lote",
+    "producer": "Productor",
+    "location": "Ubicación",
+    "estimatedYield": "Rendimiento Est.",
+    "score": "Puntaje",
+    "txHash": "Tx Hash",
+    "issuedAt": "Emitido",
+    "status": {
+      "active": "Activo",
+      "minted": "Emitido",
+      "pending": "Pendiente"
+    }
+  },
+
+  "common": {
+    "unknown": "Desconocido",
+    "registerPlot": "Registrar Lote",
+    "mvpDemo": "Demo MVP · Proyecto Hackathon",
+    "sufficient": "documentación suficiente",
+    "insufficient": "documentación insuficiente",
+    "ton": "Ton",
+    "ha": "ha",
+    "na": "N/D"
+  }
+}

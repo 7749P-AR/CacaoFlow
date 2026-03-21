@@ -9,22 +9,24 @@ import { CheckCircle2, TrendingUp, DollarSign, Users, BarChart3 } from "lucide-r
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useT } from "@/hooks/useT";
 
 export default function OutcomeSimulationPage() {
   const [simulated, setSimulated] = useState(false);
+  const { t } = useT();
   const s = mockOutcome;
   const scoring = mockScoring[s.lotId];
 
   const handleSimulate = () => {
     setSimulated(true);
-    toast.success("Outcome simulation complete", {
-      description: "Repayment scenario calculated. Funds distributed between originator and financier.",
+    toast.success(t("simulation.completeBtn"), {
+      description: t("simulation.disclaimer").replace("⚠️ ", ""),
     });
   };
 
   return (
     <>
-      <PageHeader title="Outcome Simulation" description="Repayment scenario modeling for harvest cycle closure and fund distribution" />
+      <PageHeader title={t("simulation.title")} description={t("simulation.description")} />
 
       <motion.div
         initial={{ opacity: 0, y: 10 }}
@@ -36,27 +38,27 @@ export default function OutcomeSimulationPage() {
         <Card>
           <CardHeader className="border-b border-border/50 pb-4">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-base">Scenario: Successful Harvest</CardTitle>
-              <Badge variant="success">Simulation</Badge>
+              <CardTitle className="text-base">{t("simulation.scenario.title")}</CardTitle>
+              <Badge variant="success">{t("simulation.scenario.badge")}</Badge>
             </div>
           </CardHeader>
           <CardContent className="pt-5 space-y-5">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               <div className="text-center p-3 rounded-md bg-secondary">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Projected Yield</p>
-                <p className="text-lg font-semibold tabular-nums mt-1">{s.projectedYield} Ton</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("simulation.fields.projectedYield")}</p>
+                <p className="text-lg font-semibold tabular-nums mt-1">{s.projectedYield} {t("common.ton")}</p>
               </div>
               <div className="text-center p-3 rounded-md bg-secondary">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Actual Yield</p>
-                <p className="text-lg font-semibold tabular-nums mt-1">{s.actualYield} Ton</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("simulation.fields.actualYield")}</p>
+                <p className="text-lg font-semibold tabular-nums mt-1">{s.actualYield} {t("common.ton")}</p>
                 <Badge variant="success" className="mt-1 text-[10px]">+{((s.performanceRatio - 1) * 100).toFixed(1)}%</Badge>
               </div>
               <div className="text-center p-3 rounded-md bg-secondary">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Price/Kg</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("simulation.fields.pricePerKg")}</p>
                 <p className="text-lg font-semibold tabular-nums mt-1">${s.pricePerKg.toLocaleString()}</p>
               </div>
               <div className="text-center p-3 rounded-md bg-secondary">
-                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Revenue</p>
+                <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("simulation.fields.totalRevenue")}</p>
                 <p className="text-lg font-semibold tabular-nums mt-1">${s.totalRevenue.toLocaleString()}</p>
               </div>
             </div>
@@ -66,7 +68,7 @@ export default function OutcomeSimulationPage() {
         {/* Distribution */}
         <Card>
           <CardHeader className="border-b border-border/50 pb-4">
-            <CardTitle className="text-base">Repayment Distribution</CardTitle>
+            <CardTitle className="text-base">{t("simulation.distribution.title")}</CardTitle>
           </CardHeader>
           <CardContent className="pt-5">
             <div className="grid sm:grid-cols-2 gap-4">
@@ -76,12 +78,12 @@ export default function OutcomeSimulationPage() {
                     <DollarSign className="h-4 w-4 text-primary" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Financier Repayment</p>
+                    <p className="text-xs text-muted-foreground">{t("simulation.distribution.financier")}</p>
                     <p className="text-xl font-bold tabular-nums">${s.financierRepayment.toLocaleString()}</p>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Return on eligible amount of {scoring ? `$${scoring.maxFunding.toLocaleString()}` : "N/A"}
+                  {t("simulation.distribution.financierNote")} {scoring ? `$${scoring.maxFunding.toLocaleString()}` : t("common.na")}
                 </p>
               </div>
 
@@ -91,12 +93,12 @@ export default function OutcomeSimulationPage() {
                     <Users className="h-4 w-4 text-success" />
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground">Producer Net</p>
+                    <p className="text-xs text-muted-foreground">{t("simulation.distribution.producer")}</p>
                     <p className="text-xl font-bold tabular-nums">${s.producerNet.toLocaleString()}</p>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  After repaying financing obligations
+                  {t("simulation.distribution.producerNote")}
                 </p>
               </div>
             </div>
@@ -104,8 +106,8 @@ export default function OutcomeSimulationPage() {
             <div className="mt-6 rounded-md bg-secondary p-3 flex items-center gap-3">
               <BarChart3 className="h-5 w-5 text-primary shrink-0" />
               <div className="text-xs">
-                <p className="font-medium text-foreground">Performance Ratio: <span className="tabular-nums">{(s.performanceRatio * 100).toFixed(1)}%</span></p>
-                <p className="text-muted-foreground">Harvest exceeded projections. Both parties receive proportional distribution.</p>
+                <p className="font-medium text-foreground">{t("simulation.distribution.ratioLabel")}: <span className="tabular-nums">{(s.performanceRatio * 100).toFixed(1)}%</span></p>
+                <p className="text-muted-foreground">{t("simulation.distribution.ratioNote")}</p>
               </div>
             </div>
 
@@ -119,10 +121,10 @@ export default function OutcomeSimulationPage() {
                 {simulated ? (
                   <span className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4" />
-                    Simulation Complete
+                    {t("simulation.completeBtn")}
                   </span>
                 ) : (
-                  "Run Outcome Simulation"
+                  t("simulation.runBtn")
                 )}
               </Button>
             </div>
@@ -130,7 +132,7 @@ export default function OutcomeSimulationPage() {
         </Card>
 
         <div className="rounded-md bg-secondary/50 border border-border/50 p-3 text-xs text-muted-foreground text-center">
-          ⚠️ This is a simulation for demo purposes. Amounts and scenarios are illustrative.
+          {t("simulation.disclaimer")}
         </div>
       </motion.div>
     </>

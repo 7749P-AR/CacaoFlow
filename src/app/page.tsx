@@ -6,9 +6,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ScoreBadge } from "@/components/features/ScoreBadge";
 import { motion } from "framer-motion";
-import { Leaf, ArrowRight, Shield, BarChart3, Coins, CheckCircle2 } from "lucide-react";
-
-const heroCacao = "/hero-cacao.jpg";
+import { Leaf, ArrowRight, Shield, BarChart3, Coins, CheckCircle2, Globe, Users, Building2 } from "lucide-react";
+import { useT } from "@/hooks/useT";
+import { useLangStore } from "@/store/langStore";
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -21,6 +21,22 @@ const stagger = {
 };
 
 export default function LandingPage() {
+  const { t } = useT();
+  const { lang, setLang } = useLangStore();
+
+  const steps = [
+    { icon: Leaf, title: t("landing.flow.step1.title"), desc: t("landing.flow.step1.desc") },
+    { icon: BarChart3, title: t("landing.flow.step2.title"), desc: t("landing.flow.step2.desc") },
+    { icon: Shield, title: t("landing.flow.step3.title"), desc: t("landing.flow.step3.desc") },
+    { icon: Coins, title: t("landing.flow.step4.title"), desc: t("landing.flow.step4.desc") },
+  ];
+
+  const trustItems = [
+    { title: t("landing.trust.item1.title"), desc: t("landing.trust.item1.desc") },
+    { title: t("landing.trust.item2.title"), desc: t("landing.trust.item2.desc") },
+    { title: t("landing.trust.item3.title"), desc: t("landing.trust.item3.desc") },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Navbar */}
@@ -28,27 +44,29 @@ export default function LandingPage() {
         <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="flex items-center gap-2 font-semibold text-foreground">
             <Leaf className="h-5 w-5 text-primary" />
-            <span>Aleph Cacao</span>
+            <span>{t("nav.brand")}</span>
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/app">
-              <Button variant="ghost" size="sm">Dashboard</Button>
+              <Button variant="ghost" size="sm">{t("nav.dashboard")}</Button>
             </Link>
             <Link href="/app/register">
-              <Button variant="accent" size="sm">Registrar Lote</Button>
+              <Button variant="accent" size="sm">{t("nav.registerPlot")}</Button>
             </Link>
+            <button
+              onClick={() => setLang(lang === "en" ? "es" : "en")}
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-secondary transition-colors border border-border/50"
+            >
+              <Globe className="h-3.5 w-3.5" />
+              {lang === "en" ? "ES" : "EN"}
+            </button>
           </div>
         </div>
       </header>
 
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        {/* Hero background image */}
-        <div className="absolute inset-0 z-0">
-          <img src={heroCacao} alt="Plantación de cacao" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/80 to-background" />
-        </div>
-        <div className="container relative z-10 py-24 md:py-32">
+      <section className="border-b border-border">
+        <div className="container py-24 md:py-32">
           <motion.div
             variants={stagger}
             initial="initial"
@@ -57,39 +75,39 @@ export default function LandingPage() {
           >
             <motion.div variants={fadeUp}>
               <Badge variant="outline" className="mb-6 text-xs font-medium">
-                RWA Protocol · Pre-Harvest Financing
+                {t("landing.badge")}
               </Badge>
             </motion.div>
             <motion.h1
               variants={fadeUp}
               className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground leading-[1.1]"
             >
-              De la tierra a la cadena de bloques.{" "}
-              <span className="text-primary">Financiamiento pre-cosecha</span> sin fricciones.
+              {t("landing.hero.title1")}{" "}
+              <span className="text-primary">{t("landing.hero.title2")}</span>{" "}
+              {t("landing.hero.title3")}
             </motion.h1>
             <motion.p
               variants={fadeUp}
               className="mt-6 text-lg text-muted-foreground max-w-2xl mx-auto"
             >
-              We turn cacao harvest projections into auditable claims (VPCs).
-              Automated scoring, on-chain issuance, and access to capital — all in one platform.
+              {t("landing.hero.subtitle")}
             </motion.p>
-            <motion.div variants={fadeUp} className="mt-8 flex items-center justify-center gap-4">
+            <motion.div variants={fadeUp} className="mt-8 flex items-center justify-center gap-4 flex-wrap">
               <Link href="/app/register">
                 <Button variant="hero" size="lg">
-                  Registrar Lote Productivo
+                  {t("landing.cta.originator")}
                   <ArrowRight className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
               <Link href="/app/financing">
                 <Button variant="hero-outline" size="lg">
-                  Financing Review
+                  {t("landing.cta.investor")}
                 </Button>
               </Link>
             </motion.div>
           </motion.div>
 
-          {/* Floating Asset Card Preview */}
+          {/* VPC Preview Card */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -103,7 +121,7 @@ export default function LandingPage() {
                   <div>
                     <div className="flex items-center gap-2 mb-1">
                       <Shield className="h-4 w-4 text-primary" />
-                      <span className="font-semibold text-sm">CACAO-2026-001</span>
+                      <span className="font-semibold text-sm">VPC-2026-001</span>
                     </div>
                     <p className="text-xs text-muted-foreground">Cooperativa San Martín · Huila, Colombia</p>
                   </div>
@@ -115,12 +133,12 @@ export default function LandingPage() {
                     <p className="text-sm font-semibold tabular-nums">1.8 Ton</p>
                   </div>
                   <div>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Funding</p>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Eligible</p>
                     <p className="text-sm font-semibold tabular-nums">$3,600</p>
                   </div>
                   <div>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Riesgo</p>
-                    <Badge variant="success" className="text-[10px] mt-0.5">Bajo</Badge>
+                    <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Risk</p>
+                    <Badge variant="success" className="text-[10px] mt-0.5">Low</Badge>
                   </div>
                 </div>
               </CardContent>
@@ -129,8 +147,8 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="border-t border-border bg-secondary/30">
+      {/* Two roles */}
+      <section className="border-b border-border bg-secondary/20">
         <div className="container py-20">
           <motion.div
             initial={{ opacity: 0 }}
@@ -138,19 +156,78 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-2xl font-semibold text-foreground">Cómo funciona</h2>
-            <p className="text-sm text-muted-foreground mt-2">Del registro al financiamiento en 4 pasos</p>
+            <h2 className="text-2xl font-semibold text-foreground">{t("landing.roles.title")}</h2>
+          </motion.div>
+          <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4 }}
+            >
+              <Card className="h-full border-primary/20 hover:border-primary/40 transition-colors">
+                <CardContent className="pt-6 pb-6 flex flex-col gap-4">
+                  <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
+                    <Building2 className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{t("landing.roles.originator.title")}</h3>
+                    <p className="text-sm text-muted-foreground">{t("landing.roles.originator.desc")}</p>
+                  </div>
+                  <Link href="/app/register" className="mt-auto">
+                    <Button variant="accent" size="sm" className="w-full">
+                      {t("landing.roles.originator.cta")}
+                      <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+            >
+              <Card className="h-full border-accent/20 hover:border-accent/40 transition-colors">
+                <CardContent className="pt-6 pb-6 flex flex-col gap-4">
+                  <div className="h-10 w-10 rounded-md bg-accent/10 flex items-center justify-center">
+                    <Users className="h-5 w-5 text-accent" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold mb-1">{t("landing.roles.investor.title")}</h3>
+                    <p className="text-sm text-muted-foreground">{t("landing.roles.investor.desc")}</p>
+                  </div>
+                  <Link href="/app/financing" className="mt-auto">
+                    <Button variant="outline" size="sm" className="w-full">
+                      {t("landing.roles.investor.cta")}
+                      <ArrowRight className="h-3.5 w-3.5 ml-1" />
+                    </Button>
+                  </Link>
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it works */}
+      <section className="border-b border-border">
+        <div className="container py-20">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-2xl font-semibold text-foreground">{t("landing.flow.title")}</h2>
+            <p className="text-sm text-muted-foreground mt-2">{t("landing.flow.subtitle")}</p>
           </motion.div>
 
           <div className="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            {[
-              { icon: Leaf, title: "Registra tu lote", desc: "Ingresa datos de producción, ubicación y tipo de cacao." },
-              { icon: BarChart3, title: "Scoring automático", desc: "Nuestro motor calcula yield estimado y confiabilidad." },
-              { icon: Shield, title: "VPC Issuance", desc: "An auditable claim (VPC) is generated and linked to your harvest on-chain." },
-              { icon: Coins, title: "Financing access", desc: "Financiers fund your production based on verified, auditable data." },
-            ].map((step, i) => (
+            {steps.map((step, i) => (
               <motion.div
-                key={step.title}
+                key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -161,7 +238,7 @@ export default function LandingPage() {
                     <div className="mx-auto mb-4 h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
                       <step.icon className="h-5 w-5 text-primary" />
                     </div>
-                    <div className="text-xs font-medium text-accent mb-1 tabular-nums">Paso {i + 1}</div>
+                    <div className="text-xs font-medium text-accent mb-1 tabular-nums">{i + 1}</div>
                     <h3 className="font-semibold text-sm mb-1.5">{step.title}</h3>
                     <p className="text-xs text-muted-foreground">{step.desc}</p>
                   </CardContent>
@@ -173,16 +250,12 @@ export default function LandingPage() {
       </section>
 
       {/* Trust */}
-      <section className="border-t border-border">
+      <section className="border-b border-border bg-secondary/20">
         <div className="container py-20">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl font-semibold mb-8">Construido para confianza institucional</h2>
+            <h2 className="text-2xl font-semibold mb-8">{t("landing.trust.title")}</h2>
             <div className="grid sm:grid-cols-3 gap-6">
-              {[
-                { title: "Trazabilidad completa", desc: "Cada lote tiene un registro auditable desde el día cero." },
-                { title: "Datos verificables", desc: "Scoring basado en datos agrícolas reales y proyecciones calibradas." },
-                { title: "Auditable claims", desc: "VPCs backed by real cacao production data, verifiable on-chain." },
-              ].map((item) => (
+              {trustItems.map((item) => (
                 <div key={item.title} className="flex flex-col items-center gap-2">
                   <CheckCircle2 className="h-5 w-5 text-primary" />
                   <h3 className="font-medium text-sm">{item.title}</h3>
@@ -194,18 +267,18 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="border-t border-border bg-primary">
+      {/* Final CTA */}
+      <section className="border-b border-border bg-primary">
         <div className="container py-16 text-center">
           <h2 className="text-2xl font-semibold text-primary-foreground mb-3">
-            Liquidity for the harvest of tomorrow.
+            {t("landing.finalCta.title")}
           </h2>
           <p className="text-sm text-primary-foreground/70 mb-6">
-            Comienza a digitalizar tu producción ahora.
+            {t("landing.finalCta.subtitle")}
           </p>
           <Link href="/app/register">
             <Button variant="accent" size="lg" className="h-12 px-8 text-base font-semibold">
-              Comenzar Ahora
+              {t("landing.finalCta.btn")}
               <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </Link>
@@ -217,9 +290,9 @@ export default function LandingPage() {
         <div className="container flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
             <Leaf className="h-3.5 w-3.5 text-primary" />
-            <span>Aleph Cacao © 2026</span>
+            <span>{t("landing.footer.brand")}</span>
           </div>
-          <p>MVP Demo · Hackathon Build</p>
+          <p>{t("landing.footer.tagline")}</p>
         </div>
       </footer>
     </div>

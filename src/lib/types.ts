@@ -9,7 +9,9 @@ export interface Originator {
   id: string;
   name: string;
   type: "producer" | "cooperative";
+  country: string;
   region: string;
+  district?: string;
   contact_name: string;
   contact_email: string;
   created_at: string;
@@ -29,6 +31,10 @@ export type PlotStatus =
 
 export type DocumentationStatus = "insufficient" | "sufficient";
 
+export type LandTenureType = "owned" | "leased" | "communal" | "other";
+export type IrrigationType = "rainfed" | "irrigated" | "mixed";
+export type CropStage = "planting" | "vegetative" | "flowering" | "fruit_development" | "pre_harvest" | "harvest";
+
 export interface Plot {
   id: string;
   originator_id: string;
@@ -36,8 +42,13 @@ export interface Plot {
   crop_type: "CCN-51" | "Fino de Aroma" | "Trinitario";
   country: string;
   region: string;
+  district: string;
   area_hectares: number;
   season_label: string;
+  land_tenure_type: LandTenureType;
+  irrigation_type: IrrigationType;
+  current_crop_stage: CropStage;
+  location_note?: string;
   expected_yield_tons: number;
   estimated_harvest_date: string;
   status: PlotStatus;
@@ -49,10 +60,13 @@ export interface Plot {
 // ─── Plot Documents ──────────────────────────────────────────
 
 export type DocumentType =
+  | "identity_document"
   | "land_record"
   | "yield_history"
   | "crop_plan"
-  | "photo_evidence"
+  | "field_photos"
+  | "offtake_agreement"
+  | "bank_statement"
   | "other";
 
 export interface PlotDocument {
@@ -62,6 +76,7 @@ export interface PlotDocument {
   file_name: string;
   file_url: string;
   uploaded_at: string;
+  verification_status: "pending" | "verified" | "rejected";
 }
 
 // ─── Plot History (optional, future) ─────────────────────────
