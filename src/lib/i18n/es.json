@@ -16,7 +16,7 @@
   },
 
   "nav": {
-    "brand": "Aleph Cacao",
+    "brand": "Cacao Flow",
     "dashboard": "Dashboard",
     "myPlots": "Mis Lotes",
     "registerPlot": "Registrar Lote",
@@ -78,14 +78,14 @@
       "btn": "Comenzar Ahora"
     },
     "footer": {
-      "brand": "Aleph Cacao © 2026",
+      "brand": "Cacao Flow © 2026",
       "tagline": "Demo MVP · Proyecto Hackathon"
     }
   },
 
   "overview": {
     "title": "Resumen",
-    "description": "Panel general de Aleph Cacao",
+    "description": "Panel general de Cacao Flow",
     "stats": {
       "plots": "Lotes Activos",
       "plotsSub": "registrados",

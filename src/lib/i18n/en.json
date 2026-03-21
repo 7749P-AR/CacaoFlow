@@ -1,6 +1,6 @@
 {
   "nav": {
-    "brand": "Aleph Cacao",
+    "brand": "Cacao Flow",
     "dashboard": "Dashboard",
     "myPlots": "My Plots",
     "registerPlot": "Register Plot",
@@ -78,14 +78,14 @@
       "btn": "Get Started"
     },
     "footer": {
-      "brand": "Aleph Cacao © 2026",
+      "brand": "Cacao Flow © 2026",
       "tagline": "MVP Demo · Hackathon Build"
     }
   },
 
   "overview": {
     "title": "Overview",
-    "description": "Dashboard summary for Aleph Cacao",
+    "description": "Dashboard summary for Cacao Flow",
     "stats": {
       "plots": "Active Plots",
       "plotsSub": "registered",

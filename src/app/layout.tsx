@@ -6,8 +6,8 @@ import { Providers } from "./providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Cacao Flow - Plataforma de Gestión de Cacao",
-  description: "Gestiona tus lotes de cacao, portafolio y liquidaciones en una sola plataforma.",
+  title: "Cacao Flow — Pre-Harvest Agricultural Finance",
+  description: "Structured underwriting, auditable VPCs, and on-chain funding rails for pre-harvest cacao opportunities.",
 };
 
 export default function RootLayout({

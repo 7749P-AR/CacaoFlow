@@ -1,14 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ScoreBadge } from "@/components/features/ScoreBadge";
 import { LiveOpportunityPanel } from "@/components/features/LiveOpportunityPanel";
 import { WalletButton } from "@/components/features/WalletButton";
 import { motion } from "framer-motion";
-import { Leaf, ArrowRight, Shield, BarChart3, Coins, CheckCircle2, Globe, Users, Building2 } from "lucide-react";
+import { ArrowRight, Shield, BarChart3, Coins, CheckCircle2, Globe, Users, Building2, Wallet, Zap, TrendingUp, ExternalLink } from "lucide-react";
 import { useT } from "@/hooks/useT";
 import { useLangStore } from "@/store/langStore";
 
@@ -27,7 +27,7 @@ export default function LandingPage() {
   const { lang, setLang } = useLangStore();
 
   const steps = [
-    { icon: Leaf, title: t("landing.flow.step1.title"), desc: t("landing.flow.step1.desc") },
+    { icon: Zap, title: t("landing.flow.step1.title"), desc: t("landing.flow.step1.desc") },
     { icon: BarChart3, title: t("landing.flow.step2.title"), desc: t("landing.flow.step2.desc") },
     { icon: Shield, title: t("landing.flow.step3.title"), desc: t("landing.flow.step3.desc") },
     { icon: Coins, title: t("landing.flow.step4.title"), desc: t("landing.flow.step4.desc") },
@@ -44,9 +44,8 @@ export default function LandingPage() {
       {/* Navbar */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
         <div className="container flex h-14 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 font-semibold text-foreground">
-            <Leaf className="h-5 w-5 text-primary" />
-            <span>{t("nav.brand")}</span>
+          <Link href="/" className="flex items-center">
+            <Image src="/logo.png" alt="Cacao Flow" width={110} height={44} className="h-11 w-auto object-contain" priority />
           </Link>
           <div className="flex items-center gap-3">
             <Link href="/app">
@@ -65,7 +64,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero */}
-      <section className="border-b border-border">
+      <section className="border-b border-border bg-gradient-to-br from-slate-50 via-white to-green-50/40 dark:from-background dark:via-background dark:to-green-950/10">
         <div className="container py-24 md:py-32">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             {/* Left: Content */}
@@ -74,9 +73,13 @@ export default function LandingPage() {
               initial="initial"
               animate="animate"
             >
-              <motion.div variants={fadeUp}>
-                <Badge variant="outline" className="mb-6 text-xs font-medium">
+              <motion.div variants={fadeUp} className="flex items-center gap-2 mb-6 flex-wrap">
+                <Badge variant="outline" className="text-xs font-medium">
                   {t("landing.badge")}
+                </Badge>
+                <Badge className="text-xs font-medium bg-sky-100 text-sky-700 border-sky-200 hover:bg-sky-100">
+                  <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-sky-500 inline-block animate-pulse" />
+                  Live on Arbitrum Sepolia
                 </Badge>
               </motion.div>
               <motion.h1
@@ -133,6 +136,45 @@ export default function LandingPage() {
             >
               <LiveOpportunityPanel />
             </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Demo Path — what judges see */}
+      <section className="border-b border-border bg-slate-950 text-white">
+        <div className="container py-14">
+          <div className="text-center mb-10">
+            <p className="text-xs font-semibold uppercase tracking-widest text-sky-400 mb-2">Live Demo</p>
+            <h2 className="text-xl font-semibold text-white">Five steps. One live transaction.</h2>
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-0">
+            {[
+              { icon: Wallet,      label: "Connect Wallet",    sub: "MetaMask / injected" },
+              { icon: Shield,      label: "Approve USDC",      sub: "ERC-20 allowance" },
+              { icon: Coins,       label: "Invest",            sub: "On-chain tx" },
+              { icon: TrendingUp,  label: "Funding Bar Rises", sub: "Real-time progress" },
+              { icon: ExternalLink,label: "Arbiscan Explorer", sub: "Tx verified on-chain" },
+            ].map((step, i, arr) => (
+              <div key={i} className="flex items-center">
+                <div className="flex flex-col items-center gap-2 px-4 py-3">
+                  <div className="h-10 w-10 rounded-full bg-sky-500/20 border border-sky-500/30 flex items-center justify-center">
+                    <step.icon className="h-4.5 w-4.5 text-sky-400" style={{width: 18, height: 18}} />
+                  </div>
+                  <p className="text-sm font-semibold text-white whitespace-nowrap">{step.label}</p>
+                  <p className="text-xs text-slate-400 whitespace-nowrap">{step.sub}</p>
+                </div>
+                {i < arr.length - 1 && (
+                  <ArrowRight className="h-4 w-4 text-slate-600 shrink-0 hidden sm:block" />
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link href="/app/opportunities">
+              <Button className="bg-sky-500 hover:bg-sky-400 text-white font-semibold">
+                See Live Opportunities <ArrowRight className="h-4 w-4 ml-1" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
@@ -279,7 +321,7 @@ export default function LandingPage() {
       <footer className="border-t border-border py-6">
         <div className="container flex items-center justify-between text-xs text-muted-foreground">
           <div className="flex items-center gap-2">
-            <Leaf className="h-3.5 w-3.5 text-primary" />
+            <Image src="/logo.png" alt="Cacao Flow" width={70} height={28} className="h-7 w-auto object-contain opacity-70" />
             <span>{t("landing.footer.brand")}</span>
           </div>
           <p>{t("landing.footer.tagline")}</p>
