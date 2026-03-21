@@ -1,8 +1,30 @@
 {
-  "chainId": 43113,
-  "network": "avalanche-fuji",
-  "MockUSDC": "0x0000000000000000000000000000000000000000",
-  "CacaoFlowOpportunities": "0x0000000000000000000000000000000000000000",
-  "deployedAt": "pending",
-  "deployer": "pending"
+  "421614": {
+    "network": "arbitrum-sepolia",
+    "MockUSDC": "0x0000000000000000000000000000000000000000",
+    "CacaoFlowOpportunities": "0x0000000000000000000000000000000000000000",
+    "deployedAt": "pending",
+    "deployer": "pending"
+  },
+  "42161": {
+    "network": "arbitrum-one",
+    "MockUSDC": "0x0000000000000000000000000000000000000000",
+    "CacaoFlowOpportunities": "0x0000000000000000000000000000000000000000",
+    "deployedAt": "pending",
+    "deployer": "pending"
+  },
+  "43113": {
+    "network": "avalanche-fuji",
+    "MockUSDC": "0x0000000000000000000000000000000000000000",
+    "CacaoFlowOpportunities": "0x0000000000000000000000000000000000000000",
+    "deployedAt": "pending",
+    "deployer": "pending"
+  },
+  "43114": {
+    "network": "avalanche",
+    "MockUSDC": "0x0000000000000000000000000000000000000000",
+    "CacaoFlowOpportunities": "0x0000000000000000000000000000000000000000",
+    "deployedAt": "pending",
+    "deployer": "pending"
+  }
 }

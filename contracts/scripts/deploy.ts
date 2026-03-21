@@ -2,10 +2,31 @@ import { ethers } from "hardhat";
 import * as fs from "fs";
 import * as path from "path";
 
+const EXPLORERS: Record<number, string> = {
+  421614: "https://sepolia.arbiscan.io/address/",
+  42161:  "https://arbiscan.io/address/",
+  43113:  "https://testnet.snowtrace.io/address/",
+  43114:  "https://snowtrace.io/address/",
+  31337:  "http://localhost:8545/",
+};
+
+const NETWORK_NAMES: Record<number, string> = {
+  421614: "arbitrum-sepolia",
+  42161:  "arbitrum-one",
+  43113:  "avalanche-fuji",
+  43114:  "avalanche",
+  31337:  "localhost",
+};
+
 async function main() {
   const [deployer] = await ethers.getSigners();
+  const network = await ethers.provider.getNetwork();
+  const chainId = Number(network.chainId);
+  const networkName = NETWORK_NAMES[chainId] || `chain-${chainId}`;
+
   console.log("Deploying contracts with:", deployer.address);
-  console.log("Balance:", ethers.formatEther(await ethers.provider.getBalance(deployer.address)), "AVAX");
+  console.log("Network:", networkName, `(chainId: ${chainId})`);
+  console.log("Balance:", ethers.formatEther(await ethers.provider.getBalance(deployer.address)));
 
   // 1. Deploy MockUSDC
   console.log("\n1. Deploying MockUSDC...");
@@ -23,26 +44,27 @@ async function main() {
   const cacaoFlowAddress = await cacaoFlow.getAddress();
   console.log("CacaoFlowOpportunities deployed to:", cacaoFlowAddress);
 
-  // 3. Save addresses to frontend
-  const addresses = {
-    chainId: 43113,
-    network: "avalanche-fuji",
+  // 3. Save addresses to frontend (update only this chainId)
+  const outputDir = path.join(__dirname, "../../src/lib/contracts");
+  if (!fs.existsSync(outputDir)) {
+    fs.mkdirSync(outputDir, { recursive: true });
+  }
+
+  const addressesFile = path.join(outputDir, "addresses.json");
+  const existing = fs.existsSync(addressesFile)
+    ? JSON.parse(fs.readFileSync(addressesFile, "utf8"))
+    : {};
+
+  existing[String(chainId)] = {
+    network: networkName,
     MockUSDC: usdcAddress,
     CacaoFlowOpportunities: cacaoFlowAddress,
     deployedAt: new Date().toISOString(),
     deployer: deployer.address,
   };
 
-  const outputDir = path.join(__dirname, "../../src/lib/contracts");
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
-  fs.writeFileSync(
-    path.join(outputDir, "addresses.json"),
-    JSON.stringify(addresses, null, 2)
-  );
-  console.log("\nAddresses saved to src/lib/contracts/addresses.json");
+  fs.writeFileSync(addressesFile, JSON.stringify(existing, null, 2));
+  console.log(`\nAddresses saved for chainId ${chainId} in src/lib/contracts/addresses.json`);
 
   // 4. Export ABIs
   const usdcArtifact = await ethers.getContractFactory("MockUSDC");
@@ -63,7 +85,8 @@ async function main() {
   console.log("MockUSDC:               ", usdcAddress);
   console.log("CacaoFlowOpportunities: ", cacaoFlowAddress);
   console.log("─────────────────────────────────────────");
-  console.log("Explorer: https://testnet.snowtrace.io/address/" + cacaoFlowAddress);
+  const explorer = EXPLORERS[chainId] || "";
+  if (explorer) console.log("Explorer: " + explorer + cacaoFlowAddress);
 }
 
 main().catch((error) => {

@@ -2,13 +2,13 @@
 
 import { useState } from "react";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt, useReadContract, useSwitchChain } from "wagmi";
-import { avalancheFuji } from "@/lib/wagmi";
+import { PRIMARY_CHAIN } from "@/lib/wagmi";
 import {
-  CONTRACT_ADDRESSES,
+  getContractAddresses,
+  isDeployedOnChain,
   CACAO_FLOW_ABI,
   MOCK_USDC_ABI,
   toUsdcUnits,
-  isContractsDeployed,
 } from "@/lib/contracts";
 
 export type InvestStep =
@@ -34,17 +34,19 @@ export function useInvest({ onchainOpportunityId, amountUsd }: UseInvestOptions)
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const amountUnits = toUsdcUnits(amountUsd);
+  const chainId = chain?.id ?? PRIMARY_CHAIN.id;
+  const addrs = getContractAddresses(chainId);
 
   const { data: allowance } = useReadContract({
-    address: CONTRACT_ADDRESSES.MockUSDC,
+    address: addrs.MockUSDC,
     abi: MOCK_USDC_ABI,
     functionName: "allowance",
-    args: [address ?? "0x0", CONTRACT_ADDRESSES.CacaoFlowOpportunities],
+    args: [address ?? "0x0", addrs.CacaoFlowOpportunities],
     query: { enabled: !!address },
   });
 
   const { data: usdcBalance } = useReadContract({
-    address: CONTRACT_ADDRESSES.MockUSDC,
+    address: addrs.MockUSDC,
     abi: MOCK_USDC_ABI,
     functionName: "balanceOf",
     args: [address ?? "0x0"],
@@ -74,15 +76,16 @@ export function useInvest({ onchainOpportunityId, amountUsd }: UseInvestOptions)
       return;
     }
 
-    if (chain?.id !== avalancheFuji.id) {
+    const targetChainId = PRIMARY_CHAIN.id;
+    if (chain?.id !== targetChainId) {
       setStep("wrong_network");
-      switchChain({ chainId: avalancheFuji.id });
+      switchChain({ chainId: targetChainId });
       return;
     }
 
-    if (!isContractsDeployed) {
+    if (!isDeployedOnChain(chainId)) {
       setStep("not_deployed");
-      setErrorMsg("Contracts are not deployed yet. Run the deploy script first.");
+      setErrorMsg("Contracts are not deployed on this network yet.");
       return;
     }
 
@@ -97,22 +100,22 @@ export function useInvest({ onchainOpportunityId, amountUsd }: UseInvestOptions)
       if (currentAllowance < amountUnits) {
         setStep("approving");
         const hash = await writeContractAsync({
-          address: CONTRACT_ADDRESSES.MockUSDC,
+          address: addrs.MockUSDC,
           abi: MOCK_USDC_ABI,
           functionName: "approve",
-          args: [CONTRACT_ADDRESSES.CacaoFlowOpportunities, amountUnits],
+          args: [addrs.CacaoFlowOpportunities, amountUnits],
         });
         setApproveTxHash(hash);
         setStep("approve_pending");
 
         // Wait for approve confirmation
-        await waitForTx(hash);
+        await waitForTx(hash, chainId);
       }
 
       // Step 2: Invest
       setStep("investing");
       const hash = await writeContractAsync({
-        address: CONTRACT_ADDRESSES.CacaoFlowOpportunities,
+        address: addrs.CacaoFlowOpportunities,
         abi: CACAO_FLOW_ABI,
         functionName: "invest",
         args: [onchainOpportunityId, amountUnits],
@@ -120,7 +123,7 @@ export function useInvest({ onchainOpportunityId, amountUsd }: UseInvestOptions)
       setInvestTxHash(hash);
       setStep("invest_pending");
 
-      await waitForTx(hash);
+      await waitForTx(hash, chainId);
       setStep("success");
     } catch (e: unknown) {
       setStep("error");
@@ -145,9 +148,18 @@ export function useInvest({ onchainOpportunityId, amountUsd }: UseInvestOptions)
   };
 }
 
-async function waitForTx(hash: `0x${string}`) {
+async function waitForTx(hash: `0x${string}`, chainId: number) {
   const { createPublicClient, http } = await import("viem");
-  const { avalancheFuji: fuji } = await import("wagmi/chains");
-  const client = createPublicClient({ chain: fuji, transport: http() });
+  const chains = await import("wagmi/chains");
+  const chainMap: Record<number, unknown> = {
+    421614: chains.arbitrumSepolia,
+    42161:  chains.arbitrum,
+    43113:  chains.avalancheFuji,
+    43114:  chains.avalanche,
+    11155111: chains.sepolia,
+    1:      chains.mainnet,
+  };
+  const chain = chainMap[chainId] ?? chains.arbitrumSepolia;
+  const client = createPublicClient({ chain: chain as Parameters<typeof createPublicClient>[0]["chain"], transport: http() });
   await client.waitForTransactionReceipt({ hash });
 }

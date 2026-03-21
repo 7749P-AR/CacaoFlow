@@ -1,9 +1,9 @@
 import { createConfig, http } from "wagmi";
-import { avalancheFuji, avalanche, mainnet, sepolia, polygon } from "wagmi/chains";
+import { avalancheFuji, avalanche, mainnet, sepolia, polygon, arbitrum, arbitrumSepolia } from "wagmi/chains";
 import { injected } from "wagmi/connectors";
 
-// Chains soportadas - ordenadas por preferencia
-export const supportedChains = [avalancheFuji, avalanche, mainnet, sepolia, polygon] as const;
+// Chains soportadas - testnets primero para hackathon
+export const supportedChains = [arbitrumSepolia, avalancheFuji, arbitrum, avalanche, mainnet, sepolia, polygon] as const;
 
 export type SupportedChain = (typeof supportedChains)[number];
 
@@ -14,6 +14,8 @@ export const wagmiConfig = createConfig({
     injected(),
   ],
   transports: {
+    [arbitrumSepolia.id]: http("https://sepolia-rollup.arbitrum.io/rpc"),
+    [arbitrum.id]: http("https://arb1.arbitrum.io/rpc"),
     [avalancheFuji.id]: http("https://api.avax-test.network/ext/bc/C/rpc"),
     [avalanche.id]: http("https://api.avax.network/ext/bc/C/rpc"),
     [mainnet.id]: http("https://eth.llamarpc.com"),
@@ -25,6 +27,8 @@ export const wagmiConfig = createConfig({
 // Chain helpers
 export function getChainName(chainId: number): string {
   const chainNames: Record<number, string> = {
+    [arbitrumSepolia.id]: "Arbitrum Sepolia",
+    [arbitrum.id]: "Arbitrum One",
     [avalancheFuji.id]: "Avalanche Fuji",
     [avalanche.id]: "Avalanche C-Chain",
     [mainnet.id]: "Ethereum",
@@ -36,6 +40,8 @@ export function getChainName(chainId: number): string {
 
 export function getChainColor(chainId: number): string {
   const chainColors: Record<number, string> = {
+    [arbitrumSepolia.id]: "text-sky-600 border-sky-200 bg-sky-50",
+    [arbitrum.id]: "text-sky-700 border-sky-300 bg-sky-100",
     [avalancheFuji.id]: "text-amber-600 border-amber-200 bg-amber-50",
     [avalanche.id]: "text-red-600 border-red-200 bg-red-50",
     [mainnet.id]: "text-blue-600 border-blue-200 bg-blue-50",
@@ -46,7 +52,11 @@ export function getChainColor(chainId: number): string {
 }
 
 export function isTestnet(chainId: number): boolean {
-  return chainId === avalancheFuji.id || chainId === sepolia.id;
+  return chainId === arbitrumSepolia.id || chainId === avalancheFuji.id || chainId === sepolia.id;
 }
 
-export { avalancheFuji, avalanche, mainnet, sepolia, polygon };
+/** Chain where CacaoFlow contracts are deployed (primary testnet for hackathon) */
+export const PRIMARY_CHAIN = arbitrumSepolia;
+export const PRIMARY_CHAIN_MAINNET = arbitrum;
+
+export { arbitrumSepolia, arbitrum, avalancheFuji, avalanche, mainnet, sepolia, polygon };
