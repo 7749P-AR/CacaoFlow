@@ -93,8 +93,8 @@ export function LiveOpportunityPanel() {
           </div>
           <Progress value={fundedPercent} className="h-2 mb-1.5" />
           <div className="flex items-center justify-between text-[10px] text-muted-foreground tabular-nums">
-            <span>${opp.raised_amount_usd.toLocaleString()} raised</span>
-            <span>${opp.target_raise_usd.toLocaleString()} target</span>
+            <span>${opp.raised_amount_usd.toLocaleString("en-US")} raised</span>
+            <span>${opp.target_raise_usd.toLocaleString("en-US")} target</span>
           </div>
         </div>
 
