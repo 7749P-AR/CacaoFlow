@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { BarChart3, FilePlus, Briefcase, Calculator, LayoutDashboard, Globe, TrendingUp } from "lucide-react";
+import { BarChart3, FilePlus, Briefcase, Calculator, LayoutDashboard, Globe, TrendingUp, UserPlus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ export function AppNavbar() {
 
   const navItems = [
     { href: "/app", label: t("nav.dashboard"), icon: LayoutDashboard },
+    { href: "/app/signup", label: "Registro", icon: UserPlus }, // New user registration
     { href: "/app/lots", label: t("nav.myPlots"), icon: BarChart3 },
     { href: "/app/register", label: t("nav.registerPlot"), icon: FilePlus },
     { href: "/app/opportunities", label: t("nav.opportunities"), icon: TrendingUp },
@@ -35,7 +36,7 @@ export function AppNavbar() {
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between">
         <Link href="/" className="flex items-center">
-          <Image src="/logo.png" alt="Cacao Flow" width={110} height={44} className="h-11 w-auto object-contain" priority />
+          <Image src="/logo.png" alt="Cacao Flow" width={110} height={44} className="h-11 w-auto object-contain" style={{ width: "auto" }} priority />
         </Link>
 
         {/* Desktop nav */}

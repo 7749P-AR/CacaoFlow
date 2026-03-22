@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useT } from "@/hooks/useT";
 import { useLangStore } from "@/store/langStore";
+import { useState } from "react";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -78,6 +79,7 @@ const CHAIN_ROADMAP = [
 ];
 
 export default function LandingPage() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const { t } = useT();
   const { lang, setLang } = useLangStore();
 
@@ -101,12 +103,14 @@ export default function LandingPage() {
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
         <div className="container flex h-14 items-center justify-between">
           <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="Cacao Flow" width={110} height={44} className="h-10 w-auto object-contain" priority />
+            <Image src="/logo.png" alt="Cacao Flow" width={110} height={44} className="h-10 w-auto object-contain" style={{ width: "auto" }} priority />
           </Link>
           <div className="flex items-center gap-3">
-            <Link href="/app">
-              <Button variant="ghost" size="sm" className="text-muted-foreground">{t("nav.dashboard")}</Button>
-            </Link>
+            <Button variant="ghost" size="sm" className="text-muted-foreground" asChild>
+              <Link href="/app">
+                {t("nav.dashboard")}
+              </Link>
+            </Button>
             <WalletButton />
             <button
               onClick={() => setLang(lang === "en" ? "es" : "en")}
@@ -179,17 +183,17 @@ export default function LandingPage() {
               </motion.ul>
 
               <motion.div variants={fadeUp} className="mt-8 flex items-center gap-3 flex-wrap">
-                <Link href="/app/opportunities">
-                  <Button variant="hero" size="lg" className="font-semibold gap-2">
+                <Button variant="hero" size="lg" className="font-semibold gap-2" asChild>
+                  <Link href="/app/opportunities">
                     {t("landing.cta.primary")}
                     <ArrowRight className="h-4 w-4" />
-                  </Button>
-                </Link>
-                <Link href="/app/register">
-                  <Button variant="hero-outline" size="lg" className="font-semibold">
+                  </Link>
+                </Button>
+                <Button variant="hero-outline" size="lg" className="font-semibold" asChild>
+                  <Link href="/app/signup">
                     {t("landing.cta.secondary")}
-                  </Button>
-                </Link>
+                  </Link>
+                </Button>
               </motion.div>
 
             </motion.div>
@@ -219,51 +223,78 @@ export default function LandingPage() {
             <h2 className="text-2xl font-semibold text-foreground">{t("landing.roles.title")}</h2>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
-            {[
-              {
-                icon: Building2, color: "primary" as const,
-                title: t("landing.roles.originator.title"),
-                desc: t("landing.roles.originator.desc"),
-                cta: t("landing.roles.originator.cta"),
-                href: "/app/register",
-                variant: "accent" as const,
-              },
-              {
-                icon: Users, color: "accent" as const,
-                title: t("landing.roles.investor.title"),
-                desc: t("landing.roles.investor.desc"),
-                cta: t("landing.roles.investor.cta"),
-                href: "/app/financing",
-                variant: "outline" as const,
-              },
-            ].map((role, i) => (
-              <motion.div
-                key={role.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.08 }}
-              >
-                <Card className={`h-full transition-colors hover:border-${role.color}/40 border-${role.color}/20`}>
-                  <CardContent className="pt-6 pb-6 flex flex-col gap-4">
-                    <div className={`h-10 w-10 rounded-lg bg-${role.color}/10 flex items-center justify-center`}>
-                      <role.icon className={`h-5 w-5 text-${role.color}`} />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold mb-1">{role.title}</h3>
-                      <p className="text-sm text-muted-foreground">{role.desc}</p>
-                    </div>
-                    <Link href={role.href} className="mt-auto">
-                      <Button variant={role.variant} size="sm" className="w-full gap-1">
-                        {role.cta} <ArrowRight className="h-3.5 w-3.5" />
-                      </Button>
+          {!isLoggedIn ? (
+            <div className="max-w-2xl mx-auto text-center space-y-6">
+              <div className="bg-background border border-border/60 p-8 rounded-xl shadow-sm">
+                <Shield className="h-10 w-10 text-primary mx-auto mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Acceso a la Plataforma</h3>
+                <p className="text-sm text-muted-foreground mb-6">
+                  Cacao Flow es una plataforma segura. Por conveniencia del sistema y para garantizar la integridad de las transacciones, requerimos que los usuarios creen una cuenta gratuita. No existen cargos ocultos ni comisiones por registro.
+                </p>
+                <div className="flex flex-wrap items-center justify-center gap-4">
+                  <Button variant="outline" size="lg" onClick={() => setIsLoggedIn(true)}>
+                    Simular Sesión Activa (Login)
+                  </Button>
+                  <Button variant="accent" size="lg" asChild>
+                    <Link href="/app/signup">
+                      Crear mi cuenta gratis
                     </Link>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto relative">
+              <div className="absolute -top-12 right-0">
+                <Button variant="outline" size="sm" onClick={() => setIsLoggedIn(false)} className="text-xs">
+                  Cerrar Sesión (Simulado)
+                </Button>
+              </div>
+              {[
+                {
+                  icon: Building2, color: "primary" as const,
+                  title: t("landing.roles.originator.title"),
+                  desc: t("landing.roles.originator.desc"),
+                  cta: t("landing.roles.originator.cta"),
+                  href: "/app/signup",
+                  variant: "accent" as const,
+                },
+                {
+                  icon: Users, color: "accent" as const,
+                  title: t("landing.roles.investor.title"),
+                  desc: t("landing.roles.investor.desc"),
+                  cta: t("landing.roles.investor.cta"),
+                  href: "/app/financing",
+                  variant: "outline" as const,
+                },
+              ].map((role, i) => (
+                <motion.div
+                  key={role.title}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.08 }}
+                >
+                  <Card className={`h-full transition-colors hover:border-${role.color}/40 border-${role.color}/20`}>
+                    <CardContent className="pt-6 pb-6 flex flex-col gap-4">
+                      <div className={`h-10 w-10 rounded-lg bg-${role.color}/10 flex items-center justify-center`}>
+                        <role.icon className={`h-5 w-5 text-${role.color}`} />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold mb-1">{role.title}</h3>
+                        <p className="text-sm text-muted-foreground">{role.desc}</p>
+                      </div>
+                      <Button variant={role.variant} size="sm" className="w-full gap-1 mt-auto" asChild>
+                        <Link href={role.href}>
+                          {role.cta} <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
@@ -463,18 +494,18 @@ export default function LandingPage() {
               {t("landing.finalCta.subtitle")}
             </p>
             <div className="flex items-center justify-center gap-3 flex-wrap">
-              <Link href="/app/register">
-                <Button variant="accent" size="lg" className="h-11 px-7 font-semibold gap-2">
+              <Button variant="accent" size="lg" className="h-11 px-7 font-semibold gap-2" asChild>
+                <Link href="/app/signup">
                   {t("landing.finalCta.btn")}
                   <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-              <Link href="/app/opportunities">
-                <Button size="lg" className="h-11 px-7 font-semibold bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground border border-primary-foreground/20 gap-2">
+                </Link>
+              </Button>
+              <Button size="lg" className="h-11 px-7 font-semibold bg-primary-foreground/10 hover:bg-primary-foreground/20 text-primary-foreground border border-primary-foreground/20 gap-2" asChild>
+                <Link href="/app/opportunities">
                   Browse Opportunities
                   <ArrowUpRight className="h-4 w-4" />
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           </div>
         </div>
@@ -484,7 +515,7 @@ export default function LandingPage() {
       <footer className="border-t border-border py-5">
         <div className="container flex items-center justify-between text-xs text-muted-foreground flex-wrap gap-3">
           <div className="flex items-center gap-2">
-            <Image src="/logo.png" alt="Cacao Flow" width={64} height={26} className="h-6 w-auto object-contain opacity-60" />
+            <Image src="/logo.png" alt="Cacao Flow" width={64} height={26} className="h-6 w-auto object-contain opacity-60" style={{ width: "auto" }} />
             <span>{t("landing.footer.brand")}</span>
           </div>
           <div className="flex items-center gap-4">

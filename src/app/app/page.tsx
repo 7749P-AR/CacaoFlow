@@ -49,12 +49,12 @@ export default function OverviewPage() {
   return (
     <>
       <PageHeader title={t("overview.title")} description={t("overview.description")}>
-        <Link href="/app/register">
-          <Button variant="accent" size="sm">
+        <Button variant="accent" size="sm" asChild>
+          <Link href="/app/register">
             <Plus className="h-4 w-4 mr-1" />
             {t("common.registerPlot")}
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </PageHeader>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -94,9 +94,11 @@ export default function OverviewPage() {
         <CardHeader className="border-b border-border/50 pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-base">{t("overview.recentPlots.title")}</CardTitle>
-            <Link href="/app/lots">
-              <Button variant="ghost" size="sm" className="text-xs">{t("overview.recentPlots.viewAll")}</Button>
-            </Link>
+            <Button variant="ghost" size="sm" className="text-xs" asChild>
+              <Link href="/app/lots">
+                {t("overview.recentPlots.viewAll")}
+              </Link>
+            </Button>
           </div>
         </CardHeader>
         <CardContent className="p-0">
@@ -104,12 +106,12 @@ export default function OverviewPage() {
             <div className="py-12 text-center">
               <Leaf className="h-8 w-8 text-muted-foreground/40 mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">{t("overview.recentPlots.empty")}</p>
-              <Link href="/app/register">
-                <Button variant="outline" size="sm" className="mt-3">
+              <Button variant="outline" size="sm" className="mt-3" asChild>
+                <Link href="/app/register">
                   <Plus className="h-3.5 w-3.5 mr-1" />
                   {t("overview.recentPlots.registerFirst")}
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </div>
           ) : (
             <div className="overflow-x-auto">

@@ -135,12 +135,12 @@ export default function MyLotsPage() {
   return (
     <>
       <PageHeader title={t("lots.title")} description={t("lots.description")}>
-        <Link href="/app/register">
-          <Button variant="accent" size="sm">
+        <Button variant="accent" size="sm" asChild>
+          <Link href="/app/register">
             <Plus className="h-4 w-4 mr-1" />
             {t("lots.registerPlot")}
-          </Button>
-        </Link>
+          </Link>
+        </Button>
       </PageHeader>
 
       {/* ─── Filters ────────────────────────────────────────── */}
@@ -218,12 +218,12 @@ export default function MyLotsPage() {
               <p className="text-sm text-muted-foreground mb-6 max-w-md mx-auto">
                 {t("lots.empty.body")}
               </p>
-              <Link href="/app/register">
-                <Button variant="accent">
+              <Button variant="accent" asChild>
+                <Link href="/app/register">
                   <Plus className="h-4 w-4 mr-1" />
                   {t("lots.empty.cta")}
-                </Button>
-              </Link>
+                </Link>
+              </Button>
             </CardContent>
           </Card>
         </motion.div>
@@ -299,12 +299,12 @@ export default function MyLotsPage() {
                           <td className="py-3 px-4 text-right">
                             {action && (
                               action.href ? (
-                                <Link href={action.href}>
-                                  <Button variant="outline" size="sm" className="text-xs h-7">
+                                <Button variant="outline" size="sm" className="text-xs h-7" asChild>
+                                  <Link href={action.href}>
                                     <action.icon className="h-3 w-3 mr-1" />
                                     {action.label}
-                                  </Button>
-                                </Link>
+                                  </Link>
+                                </Button>
                               ) : (
                                 <Button variant="outline" size="sm" className="text-xs h-7" disabled>
                                   <action.icon className="h-3 w-3 mr-1" />
@@ -367,12 +367,12 @@ export default function MyLotsPage() {
                       {action && (
                         <div className="pt-2 border-t border-border/50">
                           {action.href ? (
-                            <Link href={action.href} className="block">
-                              <Button variant="outline" size="sm" className="w-full text-xs">
+                            <Button variant="outline" size="sm" className="w-full text-xs" asChild>
+                              <Link href={action.href} className="block">
                                 <action.icon className="h-3.5 w-3.5 mr-1.5" />
                                 {action.label}
-                              </Button>
-                            </Link>
+                              </Link>
+                            </Button>
                           ) : (
                             <Button variant="outline" size="sm" className="w-full text-xs" disabled>
                               <action.icon className="h-3.5 w-3.5 mr-1.5" />
